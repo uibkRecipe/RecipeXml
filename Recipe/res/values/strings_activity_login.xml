@@ -1,0 +1,28 @@
+<resources>
+
+    <string name="title_activity_login">Login</string>
+    <string name="title_activity_register">Register</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_username">Username</string>
+    <string name="prompt_password">Password</string>
+    <string name="prompt_repeat_password">Repeat Password</string>
+    <string name="action_sign_in_register"><b>Login</b></string>
+    <string name="action_sign_in_short">Login</string>
+    <string name="action_forgot_password">Recover lost password</string>
+    <string name="login_progress_signing_in">Login in&#8230;</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="error_invalid_username">This username is to short</string>
+    <string name="error_field_name">This name is too short</string>
+    <string name="promp_firstname">Firstname</string>
+    <string name="promp_lastname">Lastname</string>
+    <string name="action_register_sign_in"><b>Register</b></string>
+    <string name="action_register_short">Register</string>
+    <string name="register_progress_signing_in">Register&#8230;</string>
+    <string name="error_password_not_same">The passwords are not the same</string>
+    
+</resources>
