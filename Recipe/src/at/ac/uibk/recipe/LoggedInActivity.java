@@ -3,15 +3,20 @@ package at.ac.uibk.recipe;
 import android.app.ActionBar.Tab;
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageButton;
 import at.ac.uibk.recipe.adapter.TabsPagerAdapter;
 
 public class LoggedInActivity extends FragmentActivity implements
-		ActionBar.TabListener {
+		ActionBar.TabListener, OnClickListener {
 
 	private ViewPager viewPager = null;
 	private TabsPagerAdapter mAdapter = null;
@@ -24,7 +29,6 @@ public class LoggedInActivity extends FragmentActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_logged_in);
-		
 
 		viewPager = (ViewPager) findViewById(R.id.pager);
 		actionBar = getActionBar();
@@ -35,7 +39,11 @@ public class LoggedInActivity extends FragmentActivity implements
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
 		
-		
+		findViewById(R.id.home).setOnClickListener(this);
+		findViewById(R.id.searchTab).setOnClickListener(this);
+		findViewById(R.id.favorites).setOnClickListener(this);
+		findViewById(R.id.profile).setOnClickListener(this);
+
 		for (String tab_name : tabs) {
 			actionBar.addTab(actionBar.newTab().setText(tab_name)
 					.setTabListener(this));
@@ -100,6 +108,61 @@ public class LoggedInActivity extends FragmentActivity implements
 	@Override
 	public void onTabReselected(Tab tab, FragmentTransaction ft) {
 		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onClick(View v) {
+		if (v.getId() == R.id.home) {
+			
+		} else if (v.getId() == R.id.searchTab) {
+		
+
+		} else if (v.getId() == R.id.favorites) {
+			
+
+		} else if (v.getId() == R.id.profile) {
+			
+			
+			
+			/**
+			 * 
+			 * 
+			 * 	BACKGROUND IMAGE AFTER CLICK IS TO BIG
+			 * SETPADDING OR SOMETIGH ELSE MAYBE WILL HELP 
+			 * 
+			 * 
+			 * 
+			 * 
+			 * 
+			 * 
+			 * 
+			 * 
+			 * 
+			 * 
+			 * 
+			 * 
+			 * 
+			 */
+			ImageButton home = (ImageButton)findViewById(R.id.home);
+			home.setBackgroundResource(0);
+			home.setImageResource(R.drawable.ic_home);
+			
+			ImageButton search = (ImageButton)findViewById(R.id.searchTab);
+			search.setBackgroundResource(0);
+			search.setImageResource(R.drawable.ic_action_search2);
+			
+			ImageButton favorites = (ImageButton)findViewById(R.id.favorites);
+			favorites.setBackgroundResource(0);
+			favorites.setImageResource(R.drawable.ic_action_favorite);
+			
+			ImageButton profile = (ImageButton)findViewById(R.id.profile);
+			profile.setBackgroundResource(0);
+			profile.setImageResource(R.drawable.ic_action_person_selected);
+			
+
+
+		}
 
 	}
 
