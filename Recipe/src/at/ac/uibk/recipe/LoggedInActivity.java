@@ -3,7 +3,9 @@ package at.ac.uibk.recipe;
 import android.app.ActionBar.Tab;
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
+import android.graphics.Color;
 import android.graphics.Rect;
+import android.graphics.PorterDuff.Mode;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -38,11 +40,24 @@ public class LoggedInActivity extends FragmentActivity implements
 		actionBar.setHomeButtonEnabled(false);
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-		
 		findViewById(R.id.home).setOnClickListener(this);
 		findViewById(R.id.searchTab).setOnClickListener(this);
 		findViewById(R.id.favorites).setOnClickListener(this);
 		findViewById(R.id.profile).setOnClickListener(this);
+
+		ImageButton home = (ImageButton) findViewById(R.id.home);
+		home.setColorFilter(Color.WHITE);
+		home.setColorFilter(Color.rgb(41, 205, 255));
+		home.setImageResource(R.drawable.ic_action_home_selected);
+
+		ImageButton search = (ImageButton) findViewById(R.id.searchTab);
+		search.setColorFilter(Color.WHITE);
+
+		ImageButton favorites = (ImageButton) findViewById(R.id.favorites);
+		favorites.setColorFilter(Color.WHITE);
+
+		ImageButton profile = (ImageButton) findViewById(R.id.profile);
+		profile.setColorFilter(Color.WHITE);
 
 		for (String tab_name : tabs) {
 			actionBar.addTab(actionBar.newTab().setText(tab_name)
@@ -114,53 +129,77 @@ public class LoggedInActivity extends FragmentActivity implements
 	@Override
 	public void onClick(View v) {
 		if (v.getId() == R.id.home) {
-			
-		} else if (v.getId() == R.id.searchTab) {
-		
+			ImageButton home = (ImageButton) findViewById(R.id.home);
+			home.setColorFilter(100, Mode.CLEAR);
+			home.setColorFilter(Color.rgb(41, 205, 255));
+			home.setImageResource(R.drawable.ic_action_home_selected);
 
+			ImageButton search = (ImageButton) findViewById(R.id.searchTab);
+			search.setColorFilter(Color.WHITE, Mode.CLEAR);
+			search.setColorFilter(Color.WHITE);
+
+			ImageButton favorites = (ImageButton) findViewById(R.id.favorites);
+			favorites.setColorFilter(Color.WHITE, Mode.CLEAR);
+			favorites.setColorFilter(Color.WHITE);
+
+			ImageButton profile = (ImageButton) findViewById(R.id.profile);
+			profile.setColorFilter(Color.WHITE, Mode.CLEAR);
+			profile.setColorFilter(Color.WHITE);
+
+		} else if (v.getId() == R.id.searchTab) {
+			ImageButton home = (ImageButton) findViewById(R.id.home);
+			home.setColorFilter(Color.WHITE, Mode.CLEAR);
+			home.setColorFilter(Color.WHITE);
+
+			ImageButton search = (ImageButton) findViewById(R.id.searchTab);
+			search.setColorFilter(100, Mode.CLEAR);
+			search.setColorFilter(Color.rgb(41, 205, 255));
+			search.setImageResource(R.drawable.ic_action_search2_selected);
+
+			ImageButton favorites = (ImageButton) findViewById(R.id.favorites);
+			favorites.setColorFilter(Color.WHITE, Mode.CLEAR);
+			favorites.setColorFilter(Color.WHITE);
+
+			ImageButton profile = (ImageButton) findViewById(R.id.profile);
+			profile.setColorFilter(Color.WHITE, Mode.CLEAR);
+			profile.setColorFilter(Color.WHITE);
 		} else if (v.getId() == R.id.favorites) {
-			
+
+			ImageButton home = (ImageButton) findViewById(R.id.home);
+			home.setColorFilter(Color.WHITE, Mode.CLEAR);
+			home.setColorFilter(Color.WHITE);
+
+			ImageButton search = (ImageButton) findViewById(R.id.searchTab);
+			search.setColorFilter(Color.WHITE, Mode.CLEAR);
+			search.setColorFilter(Color.WHITE);
+
+			ImageButton favorites = (ImageButton) findViewById(R.id.favorites);
+			favorites.setColorFilter(100, Mode.CLEAR);
+			favorites.setColorFilter(Color.rgb(41, 205, 255));
+			favorites.setImageResource(R.drawable.ic_action_favorite_selected);
+
+			ImageButton profile = (ImageButton) findViewById(R.id.profile);
+			profile.setColorFilter(Color.WHITE, Mode.CLEAR);
+			profile.setColorFilter(Color.WHITE);
 
 		} else if (v.getId() == R.id.profile) {
-			
-			
-			
-			/**
-			 * 
-			 * 
-			 * 	BACKGROUND IMAGE AFTER CLICK IS TO BIG
-			 * SETPADDING OR SOMETIGH ELSE MAYBE WILL HELP 
-			 * 
-			 * 
-			 * 
-			 * 
-			 * 
-			 * 
-			 * 
-			 * 
-			 * 
-			 * 
-			 * 
-			 * 
-			 * 
-			 */
-			ImageButton home = (ImageButton)findViewById(R.id.home);
-			home.setBackgroundResource(0);
-			home.setImageResource(R.drawable.ic_home);
-			
-			ImageButton search = (ImageButton)findViewById(R.id.searchTab);
-			search.setBackgroundResource(0);
-			search.setImageResource(R.drawable.ic_action_search2);
-			
-			ImageButton favorites = (ImageButton)findViewById(R.id.favorites);
-			favorites.setBackgroundResource(0);
-			favorites.setImageResource(R.drawable.ic_action_favorite);
-			
-			ImageButton profile = (ImageButton)findViewById(R.id.profile);
-			profile.setBackgroundResource(0);
-			profile.setImageResource(R.drawable.ic_action_person_selected);
-			
 
+			ImageButton home = (ImageButton) findViewById(R.id.home);
+			home.setColorFilter(Color.WHITE, Mode.CLEAR);
+			home.setColorFilter(Color.WHITE);
+
+			ImageButton search = (ImageButton) findViewById(R.id.searchTab);
+			search.setColorFilter(Color.WHITE, Mode.CLEAR);
+			search.setColorFilter(Color.WHITE);
+
+			ImageButton favorites = (ImageButton) findViewById(R.id.favorites);
+			favorites.setColorFilter(Color.WHITE, Mode.CLEAR);
+			favorites.setColorFilter(Color.WHITE);
+
+			ImageButton profile = (ImageButton) findViewById(R.id.profile);
+			profile.setColorFilter(100, Mode.CLEAR);
+			profile.setColorFilter(Color.rgb(41, 205, 255));
+			profile.setImageResource(R.drawable.ic_action_person_selected);
 
 		}
 
