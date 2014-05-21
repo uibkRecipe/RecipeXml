@@ -1,12 +1,11 @@
 package at.ac.uibk.recipe;
 
+
 import android.app.ActionBar.Tab;
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.graphics.Color;
-import android.graphics.Rect;
 import android.graphics.PorterDuff.Mode;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
@@ -24,7 +23,8 @@ public class LoggedInActivity extends FragmentActivity implements
 	private TabsPagerAdapter mAdapter = null;
 	private ActionBar actionBar = null;
 
-	private String[] tabs = { "Co2 neutral", "Vegetarian", "Meat and Fish",
+
+	private String[] tabs = { "AlL", "Co2 neutral", "Vegetarian", "Meat and Fish",
 			"Flour-based" };
 
 	@Override
@@ -111,7 +111,7 @@ public class LoggedInActivity extends FragmentActivity implements
 	public void onTabSelected(Tab tab, FragmentTransaction ft) {
 		// TODO Auto-generated method stub
 		viewPager.setCurrentItem(tab.getPosition());
-
+		// Log.e("ABCD", tab.getText()+" asd");
 	}
 
 	@Override
@@ -204,5 +204,6 @@ public class LoggedInActivity extends FragmentActivity implements
 		}
 
 	}
+
 
 }

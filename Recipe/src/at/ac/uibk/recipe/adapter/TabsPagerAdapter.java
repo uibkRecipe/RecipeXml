@@ -1,41 +1,48 @@
 package at.ac.uibk.recipe.adapter;
 
+import java.util.Vector;
+
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.view.View;
+import android.view.ViewGroup;
+import at.ac.uibk.recipe.AllFragment;
 import at.ac.uibk.recipe.Co2NeutralFragment;
 import at.ac.uibk.recipe.FlourFragment;
 import at.ac.uibk.recipe.MeatFragment;
 import at.ac.uibk.recipe.VegetarianFragment;
 
-public class TabsPagerAdapter extends FragmentPagerAdapter{
+public class TabsPagerAdapter extends FragmentPagerAdapter {
 
-	public TabsPagerAdapter(FragmentManager fm){
+	public TabsPagerAdapter(FragmentManager fm) {
 		super(fm);
 	}
-	
+
 	@Override
 	public Fragment getItem(int index) {
-		switch(index){
+		switch (index) {
 		case 0:
-			return new Co2NeutralFragment();
+			return new AllFragment();
 		case 1:
-			return new VegetarianFragment();
+			return new Co2NeutralFragment();
 		case 2:
+			return new VegetarianFragment();
+		case 3:
 			return new MeatFragment();
-		case 3: 
+		case 4:
 			return new FlourFragment();
-					
+
 		}
 		return null;
 	}
 
-
 	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub
-		return 4;
+		return 5;
 	}
 
-}
 
+}

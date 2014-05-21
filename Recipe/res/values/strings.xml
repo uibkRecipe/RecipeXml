@@ -17,6 +17,7 @@
     <string name="title_activity_search_result">Search</string>
     <string name="title_activity_logged_in">Recipe</string>
     
+    <string name="all">all</string>
 	<string name="co2">Co2 neutral</string>
 	<string name="meat">meat</string>
 	<string name="flour">flour</string>
