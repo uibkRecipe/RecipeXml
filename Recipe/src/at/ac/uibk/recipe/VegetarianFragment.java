@@ -2,6 +2,7 @@ package at.ac.uibk.recipe;
 
 import java.util.ArrayList;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -16,6 +17,8 @@ import at.ac.uibk.recipe.adapter.MyArrayAdapter;
 
 public class VegetarianFragment extends Fragment {
 
+	private MyArrayAdapter adapter = null;
+
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.vegetarian_fragment,
@@ -24,11 +27,11 @@ public class VegetarianFragment extends Fragment {
 		// setContentView(rootView);
 
 		// 1. pass context and data to the custom adapter
-		MyArrayAdapter adapter = new MyArrayAdapter(getActivity(),
-				generateData());
+		adapter = new MyArrayAdapter(getActivity(), generateData());
 
 		// 2. Get ListView from activity_main.xml
-		ListView listView = (ListView) rootView.findViewById(R.id.mainListViewVegetarian);
+		ListView listView = (ListView) rootView
+				.findViewById(R.id.mainListViewVegetarian);
 
 		// 3. setListAdapter
 		listView.setAdapter(adapter);
@@ -38,9 +41,12 @@ public class VegetarianFragment extends Fragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				Toast.makeText(getActivity(),
-						"Click ListItem Number " + position, Toast.LENGTH_LONG)
-						.show();
+				Intent intent = new Intent(getActivity(),
+						ShowRecipeActivity.class);
+				Recipe recipe = adapter.getItem(position);
+				intent.putExtra("SELECTED_RECIPE", recipe);
+				intent.putExtra("WHICH_BEFORE", "Vegetarian");
+				startActivity(intent);
 			}
 
 		});
@@ -50,12 +56,24 @@ public class VegetarianFragment extends Fragment {
 
 	private ArrayList<Recipe> generateData() {
 		ArrayList<Recipe> items = new ArrayList<Recipe>();
-		items.add(new Recipe("Pasta", "Pasta description", "description",
-				"Title"));
-		items.add(new Recipe("Pasta", "Pasta description", "description",
-				"Title"));
-		items.add(new Recipe("Pasta", "Pasta description", "description",
-				"Title"));
+		items.add(new Recipe(1,"Pasta", "short description of recipe", "description",
+				"Title","preparation"));
+		items.add(new Recipe(2,"Pasta", "short description of recipe", "description",
+				"Title","preparation"));
+		items.add(new Recipe(3,"Pasta", "short description of recipe", "description",
+				"Title","preparation"));
+		items.add(new Recipe(4,"Pasta", "short description of recipe", "description",
+				"Title","preparation"));
+		items.add(new Recipe(5,"Pasta", "short description of recipe", "description",
+				"Title","preparation"));
+		items.add(new Recipe(6,"Pasta", "short description of recipe", "description",
+				"Title","preparation"));
+		items.add(new Recipe(7,"Pasta", "short description of recipe", "description",
+				"Title","preparation"));
+		items.add(new Recipe(8,"Pasta", "short description of recipe", "description",
+				"Title","preparation"));
+		items.add(new Recipe(9,"Pasta", "short description of recipe", "description",
+				"Title","preparation"));
 
 		return items;
 	}

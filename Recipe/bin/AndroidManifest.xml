@@ -44,6 +44,10 @@
             android:name="at.ac.uibk.recipe.LoggedInActivity"
             android:label="@string/title_activity_logged_in" >
         </activity>
+        <activity
+            android:name="at.ac.uibk.recipe.ShowRecipeActivity"
+            android:label="@string/title_activity_show_recipe" >
+        </activity>
     </application>
 
 </manifest>

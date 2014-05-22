@@ -1,20 +1,39 @@
 package at.ac.uibk.Beans;
 
-public class Recipe {
+import java.io.Serializable;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+
+@SuppressWarnings("serial")
+public class Recipe implements Serializable {
+
+	private int id = -1;
 	private String name = null;
 	private String title = null;
 
 	private String description = null;
 	private String ingredients = null;
+	private String preparation = null;
 	private byte[] picture = null;
 
-	public Recipe(String name, String description, String ingredients,
-			String title) {
+	public Recipe(int id, String name, String description, String ingredients,
+			String title, String preparation) {
+		this.id = id;
 		this.name = name;
 		this.title = title;
 		this.description = description;
 		this.ingredients = ingredients;
+		this.preparation = preparation;
+	}
+
+	public String getPreparation() {
+		return preparation;
+	}
+
+	public void setPreparation(String preparation) {
+		this.preparation = preparation;
 	}
 
 	public String getName() {
@@ -56,5 +75,19 @@ public class Recipe {
 	public void setTitle(String title) {
 		this.title = title;
 	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String toString() {
+		return this.id + " " + this.name + " " + this.title + " "
+				+ this.description + " " + this.ingredients + " " + this.preparation;
+	}
+
 
 }

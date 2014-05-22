@@ -16,14 +16,20 @@
     <string name="search_hint">Search</string>
     <string name="title_activity_search_result">Search</string>
     <string name="title_activity_logged_in">Recipe</string>
-    
     <string name="all">all</string>
-	<string name="co2">Co2 neutral</string>
-	<string name="meat">meat</string>
-	<string name="flour">flour</string>
-	<string name="vegetarian">vegetarian</string>
-	<string name="description"> </string>
-	
-	
-	
+    <string name="co2">Co2 neutral</string>
+    <string name="meat">meat</string>
+    <string name="flour">flour</string>
+    <string name="vegetarian">vegetarian</string>
+    <string name="description"></string>
+    <string name="title_activity_show_recipe">ShowRecipe</string>
+    <string name="title_recipe">Title:</string>
+    <string name="title_preparation">Preparation:</string>
+    <string name="title_ingredient">Ingredients:</string>
+    
+    <string name="test">test</string>
+    
+    
+    
+
 </resources>
