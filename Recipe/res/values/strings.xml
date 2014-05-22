@@ -26,10 +26,7 @@
     <string name="title_recipe">Title:</string>
     <string name="title_preparation">Preparation:</string>
     <string name="title_ingredient">Ingredients:</string>
-    
     <string name="test">test</string>
-    
-    
-    
+    <string name="title_activity_search_logged_in">SearchLoggedInActivity</string>
 
 </resources>
