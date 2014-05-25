@@ -101,30 +101,6 @@ public class RegisterActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	/**
-	 * FEHLER DO DRINENNEN IRGENDWO WENN I KNOPF DRUCK ST†RZT ES PROGRAMM OB
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 */
 	public void attempRegister() {
 		if (mAuthTask != null) {
 			return;
@@ -216,7 +192,8 @@ public class RegisterActivity extends Activity {
 		if (cancel) {
 			focusView.requestFocus();
 		} else {
-			mRegisterStatusMessageView.setText(R.string.register_progress_signing_in);
+			mRegisterStatusMessageView
+					.setText(R.string.register_progress_signing_in);
 			showProgress(true);
 			mAuthTask = new UserRegisterTask();
 			mAuthTask.execute((Void) null);

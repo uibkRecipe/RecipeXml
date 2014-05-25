@@ -1,14 +1,15 @@
 package at.ac.uibk.recipe;
 
-
 import android.app.ActionBar.Tab;
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff.Mode;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,9 +24,8 @@ public class LoggedInActivity extends FragmentActivity implements
 	private TabsPagerAdapter mAdapter = null;
 	private ActionBar actionBar = null;
 
-
-	private String[] tabs = { "AlL", "Co2 neutral", "Vegetarian", "Meat and Fish",
-			"Flour-based" };
+	private String[] tabs = { "AlL", "Co2 neutral", "Vegetarian",
+			"Meat and Fish", "Flour-based" };
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +73,7 @@ public class LoggedInActivity extends FragmentActivity implements
 			public void onPageSelected(int position) {
 				// on changing the page
 				// make respected tab selected
+
 				actionBar.setSelectedNavigationItem(position);
 			}
 
@@ -84,6 +85,24 @@ public class LoggedInActivity extends FragmentActivity implements
 			public void onPageScrollStateChanged(int arg0) {
 			}
 		});
+
+		if (getIntent().getStringExtra("WHICH_TAB") != null) {
+
+			String tabselected = getIntent().getStringExtra("WHICH_TAB")
+					.toUpperCase();
+
+			if (tabselected.contains("ALL")) {
+				actionBar.setSelectedNavigationItem(0);
+			} else if (tabselected.contains("CO2")) {
+				actionBar.setSelectedNavigationItem(1);
+			} else if (tabselected.contains("FLOUR")) {
+				actionBar.setSelectedNavigationItem(4);
+			} else if (tabselected.contains("MEAT")) {
+				actionBar.setSelectedNavigationItem(3);
+			} else if (tabselected.contains("VEGETARIAN")) {
+				actionBar.setSelectedNavigationItem(2);
+			}
+		}
 
 	}
 
@@ -147,63 +166,20 @@ public class LoggedInActivity extends FragmentActivity implements
 			profile.setColorFilter(Color.WHITE);
 
 		} else if (v.getId() == R.id.searchTab) {
-			ImageButton home = (ImageButton) findViewById(R.id.home);
-			home.setColorFilter(Color.WHITE, Mode.CLEAR);
-			home.setColorFilter(Color.WHITE);
 
-			ImageButton search = (ImageButton) findViewById(R.id.searchTab);
-			search.setColorFilter(100, Mode.CLEAR);
-			search.setColorFilter(Color.rgb(41, 205, 255));
-			search.setImageResource(R.drawable.ic_action_search2_selected);
+			Intent intent = new Intent(LoggedInActivity.this,
+					SearchLoggedInActivity.class);
+			intent.putExtra("WHICH_TAB", actionBar.getSelectedTab().getText()
+					.toString());
+			startActivity(intent);
+			overridePendingTransition(0, 0);
 
-			ImageButton favorites = (ImageButton) findViewById(R.id.favorites);
-			favorites.setColorFilter(Color.WHITE, Mode.CLEAR);
-			favorites.setColorFilter(Color.WHITE);
-
-			ImageButton profile = (ImageButton) findViewById(R.id.profile);
-			profile.setColorFilter(Color.WHITE, Mode.CLEAR);
-			profile.setColorFilter(Color.WHITE);
 		} else if (v.getId() == R.id.favorites) {
 
-			ImageButton home = (ImageButton) findViewById(R.id.home);
-			home.setColorFilter(Color.WHITE, Mode.CLEAR);
-			home.setColorFilter(Color.WHITE);
-
-			ImageButton search = (ImageButton) findViewById(R.id.searchTab);
-			search.setColorFilter(Color.WHITE, Mode.CLEAR);
-			search.setColorFilter(Color.WHITE);
-
-			ImageButton favorites = (ImageButton) findViewById(R.id.favorites);
-			favorites.setColorFilter(100, Mode.CLEAR);
-			favorites.setColorFilter(Color.rgb(41, 205, 255));
-			favorites.setImageResource(R.drawable.ic_action_favorite_selected);
-
-			ImageButton profile = (ImageButton) findViewById(R.id.profile);
-			profile.setColorFilter(Color.WHITE, Mode.CLEAR);
-			profile.setColorFilter(Color.WHITE);
-
 		} else if (v.getId() == R.id.profile) {
-
-			ImageButton home = (ImageButton) findViewById(R.id.home);
-			home.setColorFilter(Color.WHITE, Mode.CLEAR);
-			home.setColorFilter(Color.WHITE);
-
-			ImageButton search = (ImageButton) findViewById(R.id.searchTab);
-			search.setColorFilter(Color.WHITE, Mode.CLEAR);
-			search.setColorFilter(Color.WHITE);
-
-			ImageButton favorites = (ImageButton) findViewById(R.id.favorites);
-			favorites.setColorFilter(Color.WHITE, Mode.CLEAR);
-			favorites.setColorFilter(Color.WHITE);
-
-			ImageButton profile = (ImageButton) findViewById(R.id.profile);
-			profile.setColorFilter(100, Mode.CLEAR);
-			profile.setColorFilter(Color.rgb(41, 205, 255));
-			profile.setImageResource(R.drawable.ic_action_person_selected);
 
 		}
 
 	}
-
 
 }

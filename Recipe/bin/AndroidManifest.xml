@@ -33,7 +33,6 @@
             android:label="@string/title_activity_register"
             android:parentActivityName="at.ac.uibk.recipe.MainActivity"
             android:windowSoftInputMode="stateVisible" >
-             >
         </activity>
         <activity
             android:name="at.ac.uibk.recipe.SearchActivity"
@@ -50,7 +49,13 @@
         </activity>
         <activity
             android:name="at.ac.uibk.recipe.SearchLoggedInActivity"
-            android:label="@string/title_activity_search_logged_in" >
+            android:label="@string/title_activity_logged_in"
+            android:parentActivityName="at.ac.uibk.recipe.ShowRecipeActivity"
+            android:windowSoftInputMode="stateVisible" >
+        </activity>
+        <activity
+            android:name="at.ac.uibk.recipe.SearchFoundActivity"
+            android:label="@string/title_activity_search_found" >
         </activity>
     </application>
 

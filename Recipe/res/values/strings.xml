@@ -28,5 +28,14 @@
     <string name="title_ingredient">Ingredients:</string>
     <string name="test">test</string>
     <string name="title_activity_search_logged_in">SearchLoggedInActivity</string>
+    <string name="searchStringAll">You can search here for All Recipes. Please fill in the required Fields.</string>
+    <string name="searchStringCo2">You can search here for Co2 neutral Recipes. Please fill in the required Fields.</string>
+    <string name="searchStringVegetarian">You can search here for vegetarian Recipes. Please fill in the required Fields.</string>
+    <string name="searchStringMeat">You can search here for Meat Recipes. Please fill in the required Fields.</string>
+    <string name="searchStringFlour">You can search here for Flour-based Recipes. Please fill in the required Fields.</string>
+    <string name="searchTitle">Title</string>
+    <string name="searchTime">Time</string>
+    <string name="searchTimeString">10 min</string>
+    <string name="title_activity_search_found">SearchFound</string>
 
 </resources>

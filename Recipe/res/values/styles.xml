@@ -37,6 +37,10 @@
         <item name="windowActionBarOverlay">true</item>
     </style>
 
+    <style name="noAnimTheme" parent="android:Theme">
+        <item name="android:windowAnimationStyle">@null</item>
+    </style>
+
     <style name="ActionBar.Solid.Recipestyle" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
         <item name="background">@drawable/ab_solid_recipestyle</item>
         <!-- <item name="android:backgroundStacked">@drawable/ab_stacked_solid_recipestyle</item> -->
