@@ -9,15 +9,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
 import at.ac.uibk.Beans.Recipe;
-import at.ac.uibk.recipe.adapter.MyArrayAdapter;
+import at.ac.uibk.recipe.adapter.FavoritesArrayAdapter;
 
 public class FlourFragment extends Fragment {
 
-	private MyArrayAdapter adapter = null;
+	private FavoritesArrayAdapter adapter = null;
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -27,7 +26,7 @@ public class FlourFragment extends Fragment {
 		// setContentView(rootView);
 
 		// 1. pass context and data to the custom adapter
-		adapter = new MyArrayAdapter(getActivity(), generateData());
+		adapter = new FavoritesArrayAdapter(getActivity(), generateData());
 
 		// 2. Get ListView from activity_main.xml
 		ListView listView = (ListView) rootView
@@ -57,12 +56,12 @@ public class FlourFragment extends Fragment {
 
 	private ArrayList<Recipe> generateData() {
 		ArrayList<Recipe> items = new ArrayList<Recipe>();
-		items.add(new Recipe(1,"Pasta", "short description of recipe", "description",
-				"Title","preparation"));
-		items.add(new Recipe(2,"Pasta", "short description of recipe", "description",
-				"Title","preparation"));
-		items.add(new Recipe(3,"Pasta", "short description of recipe", "description",
-				"Title","preparation"));
+		items.add(new Recipe(1, "Pasta", "short description of recipe",
+				"description", "Title", "preparation"));
+		items.add(new Recipe(2, "Pasta", "short description of recipe",
+				"description", "Title", "preparation"));
+		items.add(new Recipe(3, "Pasta", "short description of recipe",
+				"description", "Title", "preparation"));
 
 		return items;
 	}

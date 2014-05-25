@@ -175,6 +175,13 @@ public class LoggedInActivity extends FragmentActivity implements
 			overridePendingTransition(0, 0);
 
 		} else if (v.getId() == R.id.favorites) {
+			
+			Intent intent = new Intent(LoggedInActivity.this,
+					FavoritesActivity.class);
+			intent.putExtra("WHICH_TAB", actionBar.getSelectedTab().getText()
+					.toString());
+			startActivity(intent);
+			overridePendingTransition(0, 0);
 
 		} else if (v.getId() == R.id.profile) {
 

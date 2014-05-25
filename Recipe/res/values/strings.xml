@@ -37,5 +37,6 @@
     <string name="searchTime">Time</string>
     <string name="searchTimeString">10 min</string>
     <string name="title_activity_search_found">SearchFound</string>
+    <string name="title_activity_favorites">FavoritesActivity</string>
 
 </resources>

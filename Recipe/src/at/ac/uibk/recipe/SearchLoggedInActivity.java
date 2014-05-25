@@ -1,34 +1,19 @@
 package at.ac.uibk.recipe;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.app.ActionBar;
-import android.app.FragmentTransaction;
 import android.app.ActionBar.Tab;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff.Mode;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
-import android.widget.Adapter;
-import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.SeekBar;
-import android.widget.TextView;
-import android.widget.Toast;
-import at.ac.uibk.recipe.LoginActivity.UserLoginTask;
 import at.ac.uibk.recipe.adapter.SearchTabsPagerAdapter;
 
 public class SearchLoggedInActivity extends FragmentActivity implements
@@ -188,6 +173,13 @@ public class SearchLoggedInActivity extends FragmentActivity implements
 			profile.setColorFilter(Color.WHITE);
 
 		} else if (v.getId() == R.id.favorites) {
+			
+			Intent intent = new Intent(SearchLoggedInActivity.this,
+					FavoritesActivity.class);
+			intent.putExtra("WHICH_TAB", actionBar.getSelectedTab().getText()
+					.toString());
+			startActivity(intent);
+			overridePendingTransition(0, 0);
 
 		} else if (v.getId() == R.id.profile) {
 

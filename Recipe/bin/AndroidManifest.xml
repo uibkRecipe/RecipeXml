@@ -57,6 +57,10 @@
             android:name="at.ac.uibk.recipe.SearchFoundActivity"
             android:label="@string/title_activity_search_found" >
         </activity>
+        <activity
+            android:name="at.ac.uibk.recipe.FavoritesActivity"
+            android:label="@string/title_activity_logged_in" >
+        </activity>
     </application>
 
 </manifest>
