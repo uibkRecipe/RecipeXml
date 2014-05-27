@@ -1,7 +1,7 @@
 package at.ac.uibk.recipe;
 
-import android.app.ActionBar.Tab;
 import android.app.ActionBar;
+import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Color;
@@ -9,12 +9,12 @@ import android.graphics.PorterDuff.Mode;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
+import android.widget.Toast;
 import at.ac.uibk.recipe.adapter.TabsPagerAdapter;
 
 public class LoggedInActivity extends FragmentActivity implements
@@ -123,6 +123,20 @@ public class LoggedInActivity extends FragmentActivity implements
 		if (id == R.id.action_settings) {
 			return true;
 		}
+		if (id == R.id.action_logout) {
+			Toast.makeText(
+					LoggedInActivity.this,
+					"Goodbye "
+							+ SaveSharedPreference
+									.getUserName(LoggedInActivity.this),
+					Toast.LENGTH_LONG).show();
+			SaveSharedPreference.clearUserName(LoggedInActivity.this);
+			Intent intent = new Intent(LoggedInActivity.this,
+					MainActivity.class);
+			startActivity(intent);
+			finish();
+
+		}
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -175,7 +189,7 @@ public class LoggedInActivity extends FragmentActivity implements
 			overridePendingTransition(0, 0);
 
 		} else if (v.getId() == R.id.favorites) {
-			
+
 			Intent intent = new Intent(LoggedInActivity.this,
 					FavoritesActivity.class);
 			intent.putExtra("WHICH_TAB", actionBar.getSelectedTab().getText()
@@ -184,6 +198,10 @@ public class LoggedInActivity extends FragmentActivity implements
 			overridePendingTransition(0, 0);
 
 		} else if (v.getId() == R.id.profile) {
+			Intent intent = new Intent(LoggedInActivity.this,
+					ProfileActivity.class);
+			startActivity(intent);
+			overridePendingTransition(0, 0);
 
 		}
 

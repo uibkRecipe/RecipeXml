@@ -50,7 +50,6 @@
         <activity
             android:name="at.ac.uibk.recipe.SearchLoggedInActivity"
             android:label="@string/title_activity_logged_in"
-            android:parentActivityName="at.ac.uibk.recipe.ShowRecipeActivity"
             android:windowSoftInputMode="stateVisible" >
         </activity>
         <activity
@@ -59,6 +58,10 @@
         </activity>
         <activity
             android:name="at.ac.uibk.recipe.FavoritesActivity"
+            android:label="@string/title_activity_logged_in" >
+        </activity>
+        <activity
+            android:name="at.ac.uibk.recipe.ProfileActivity"
             android:label="@string/title_activity_logged_in" >
         </activity>
     </application>

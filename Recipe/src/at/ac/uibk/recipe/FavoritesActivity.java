@@ -14,12 +14,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
+import android.widget.Toast;
 import at.ac.uibk.recipe.adapter.FavoritesTabsPagerAdapter;
-import at.ac.uibk.recipe.adapter.TabsPagerAdapter;
 
 public class FavoritesActivity extends FragmentActivity implements
 		ActionBar.TabListener, OnClickListener {
 
+	private static boolean cooked = false;
+	 
 	private ViewPager viewPager = null;
 	private FavoritesTabsPagerAdapter mAdapter = null;
 	private ActionBar actionBar = null;
@@ -103,6 +105,11 @@ public class FavoritesActivity extends FragmentActivity implements
 				actionBar.setSelectedNavigationItem(2);
 			}
 		}
+		
+		if(!cooked ){
+			Toast.makeText(FavoritesActivity.this, "These are the Recipes which you have already cooked",Toast.LENGTH_LONG).show();
+			cooked = true;
+		}
 	}
 
 	@Override
@@ -121,6 +128,20 @@ public class FavoritesActivity extends FragmentActivity implements
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			return true;
+		}
+		if (id == R.id.action_logout) {
+			Toast.makeText(
+					FavoritesActivity.this,
+					"Goodbye "
+							+ SaveSharedPreference
+									.getUserName(FavoritesActivity.this),
+					Toast.LENGTH_LONG).show();
+			SaveSharedPreference.clearUserName(FavoritesActivity.this);
+			Intent intent = new Intent(FavoritesActivity.this,
+					MainActivity.class);
+			startActivity(intent);
+			finish();
+
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -183,6 +204,10 @@ public class FavoritesActivity extends FragmentActivity implements
 			profile.setColorFilter(Color.WHITE);
 
 		} else if (v.getId() == R.id.profile) {
+			Intent intent = new Intent(FavoritesActivity.this,
+					ProfileActivity.class);
+			startActivity(intent);
+			overridePendingTransition(0, 0);
 
 		}
 

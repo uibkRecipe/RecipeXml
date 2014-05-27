@@ -1,0 +1,153 @@
+<!-- LOGGED IN ACTIVITY -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/image_background"
+    tools:context="at.ac.uibk.recipe.SearchActivity"
+    tools:ignore="MergeRootFrame" >
+
+    <TextView
+        android:id="@+id/username"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="65dp"
+        android:gravity="left|top"
+        android:padding="20dp"
+        android:text=""
+        android:textSize="20sp"
+        android:textStyle="bold" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/percentage"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/username"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:gravity="left|top"
+        android:padding="20dp"
+        android:text="95% Score"
+        android:textSize="20sp"
+        android:textStyle="bold" >
+    </TextView>
+
+    <ImageView
+        android:id="@+id/user_image"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_alignRight="@+id/username"
+        android:layout_marginTop="55dp"
+        android:background="#000000"
+        android:contentDescription="@string/description"
+        android:padding="1dp"
+        android:src="@drawable/portrait" >
+    </ImageView>
+
+    <Button
+        android:id="@+id/friendsButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/user_image"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/buttonselector"
+        android:paddingLeft="32dp"
+        android:paddingRight="32dp"
+        android:text="@string/friends"
+        android:textSize="9pt"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/statistikButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/friendsButton"
+        android:layout_gravity="right"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/buttonselector"
+        android:paddingLeft="32dp"
+        android:paddingRight="32dp"
+        android:text="@string/statistics"
+        android:textSize="9pt"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/addRecipe"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/statistikButton"
+        android:layout_gravity="right"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/buttonselector"
+        android:paddingLeft="32dp"
+        android:paddingRight="32dp"
+        android:text="@string/addRecipe"
+        android:textSize="9pt"
+        android:textStyle="bold" >
+    </Button>
+
+    <LinearLayout
+        android:id="@+id/toolbar"
+        style="@style/Toolbar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:gravity="center_horizontal" >
+
+        <ImageButton
+            android:id="@+id/home"
+            style="@style/ToolbarButton"
+            android:layout_width="60dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="18dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/description"
+            android:src="@drawable/ic_home" />
+
+        <ImageButton
+            android:id="@+id/searchTab"
+            style="@style/ToolbarButton"
+            android:layout_width="60dp"
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="18dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/description"
+            android:src="@drawable/ic_action_search2" />
+
+        <ImageButton
+            android:id="@+id/favorites"
+            style="@style/ToolbarButton"
+            android:layout_width="60dp"
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="18dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/description"
+            android:src="@drawable/ic_action_favorite" />
+
+        <ImageButton
+            android:id="@+id/profile"
+            style="@style/ToolbarButton"
+            android:layout_width="60dp"
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="10dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/description"
+            android:src="@drawable/ic_action_person" />
+    </LinearLayout>
+
+</RelativeLayout>

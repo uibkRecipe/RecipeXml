@@ -1,5 +1,7 @@
 package at.ac.uibk.recipe;
 
+import java.net.URI;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -24,7 +26,8 @@ public class LoginActivity extends Activity {
 
 	private UserLoginTask mAuthTask = null;
 
-	private String username = null;
+	private static String username = null;
+
 	private String password = null;
 
 	private EditText mUsernameView = null;
@@ -130,9 +133,52 @@ public class LoginActivity extends Activity {
 		} else {
 			mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
 			showProgress(true);
-			mAuthTask = new UserLoginTask();
-			mAuthTask.execute((Void) null);
+
+//			ClientConfig config = new DefaultClientConfig();
+//			Client client = Client.create(config);
+//			WebResource service = client.resource(getBaseURI());
+//
+//			String loginString = (service.path("rest").path("user").path("login")
+//					.path(username).path(password)
+//					.accept(MediaType.APPLICATION_JSON).get(String.class));
+//			ObjectMapper mapper = new ObjectMapper();
+//			
+//
+//			boolean login = false;
+//			try {
+//				login = mapper.readValue(test2, boolean.class);
+//			} catch (JsonParseException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			} catch (JsonMappingException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//
+//			if(login){
+//				Intent intent = new Intent(LoginActivity.this,
+//						LoggedInActivity.class);
+//
+//				SaveSharedPreference.setUserName(LoginActivity.this, username);
+//
+//				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
+//						| Intent.FLAG_ACTIVITY_NEW_TASK);
+//				startActivity(intent);
+//				finish();
+//				
+//			}else{
+//				Toast.makeText(LoginActivity.this, "Password or Username incorrect", Toast.LENGTH_LONG).show();
+//			}
+			// mAuthTask = new UserLoginTask();
+			// mAuthTask.execute((Void) null);
 		}
+	}
+
+	public static String getUsername() {
+		return username;
 	}
 
 	/**
@@ -198,11 +244,13 @@ public class LoginActivity extends Activity {
 
 			if (success) {
 
-
-				
 				Intent intent = new Intent(LoginActivity.this,
 						LoggedInActivity.class);
-				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+
+				SaveSharedPreference.setUserName(LoginActivity.this, username);
+
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
+						| Intent.FLAG_ACTIVITY_NEW_TASK);
 				startActivity(intent);
 				finish();
 			} else {
@@ -217,4 +265,9 @@ public class LoginActivity extends Activity {
 			showProgress(false);
 		}
 	}
+
+//	private static URI getBaseURI() {
+//		return UriBuilder.fromUri("http://138.232.65.234:8080/RestServer/")
+//				.build();
+//	}
 }

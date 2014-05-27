@@ -1,20 +1,16 @@
 package at.ac.uibk.recipe;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.renderscript.Sampler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 import at.ac.uibk.Beans.Recipe;
 import at.ac.uibk.recipe.adapter.MyArrayAdapter;
 
@@ -59,12 +55,12 @@ public class Co2NeutralFragment extends Fragment {
 
 	private ArrayList<Recipe> generateData() {
 		ArrayList<Recipe> items = new ArrayList<Recipe>();
-		items.add(new Recipe(1,"Pasta", "short description of recipe", "description",
-				"Title","preparation"));
-		items.add(new Recipe(2,"Pasta", "short description of recipe", "description",
-				"Title","preparation"));
-		items.add(new Recipe(3,"Pasta", "short description of recipe", "description",
-				"Title","preparation"));
+		items.add(new Recipe(1, "Pasta", "short description of recipe",
+				"description", "Title", "preparation"));
+		items.add(new Recipe(2, "Pasta", "short description of recipe",
+				"description", "Title", "preparation"));
+		items.add(new Recipe(3, "Pasta", "short description of recipe",
+				"description", "Title", "preparation"));
 
 		return items;
 	}

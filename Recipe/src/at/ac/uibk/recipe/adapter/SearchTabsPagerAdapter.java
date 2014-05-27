@@ -18,8 +18,6 @@ public class SearchTabsPagerAdapter extends FragmentPagerAdapter {
 		super(fm);
 	}
 
-
-
 	@Override
 	public Fragment getItem(int index) {
 		switch (index) {
@@ -43,7 +41,5 @@ public class SearchTabsPagerAdapter extends FragmentPagerAdapter {
 		// TODO Auto-generated method stub
 		return 5;
 	}
-
-
 
 }

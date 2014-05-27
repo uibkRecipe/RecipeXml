@@ -20,8 +20,8 @@ public class FavoritesVegetarianFragment extends Fragment {
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.favorites_vegetarian_fragment,
-				container, false);
+		View rootView = inflater.inflate(
+				R.layout.favorites_vegetarian_fragment, container, false);
 
 		// setContentView(rootView);
 
@@ -55,24 +55,24 @@ public class FavoritesVegetarianFragment extends Fragment {
 
 	private ArrayList<Recipe> generateData() {
 		ArrayList<Recipe> items = new ArrayList<Recipe>();
-		items.add(new Recipe(1,"Pasta", "short description of recipe", "description",
-				"Title","preparation"));
-		items.add(new Recipe(2,"Pasta", "short description of recipe", "description",
-				"Title","preparation"));
-		items.add(new Recipe(3,"Pasta", "short description of recipe", "description",
-				"Title","preparation"));
-		items.add(new Recipe(4,"Pasta", "short description of recipe", "description",
-				"Title","preparation"));
-		items.add(new Recipe(5,"Pasta", "short description of recipe", "description",
-				"Title","preparation"));
-		items.add(new Recipe(6,"Pasta", "short description of recipe", "description",
-				"Title","preparation"));
-		items.add(new Recipe(7,"Pasta", "short description of recipe", "description",
-				"Title","preparation"));
-		items.add(new Recipe(8,"Pasta", "short description of recipe", "description",
-				"Title","preparation"));
-		items.add(new Recipe(9,"Pasta", "short description of recipe", "description",
-				"Title","preparation"));
+		items.add(new Recipe(1, "Pasta", "short description of recipe",
+				"description", "Title", "preparation"));
+		items.add(new Recipe(2, "Pasta", "short description of recipe",
+				"description", "Title", "preparation"));
+		items.add(new Recipe(3, "Pasta", "short description of recipe",
+				"description", "Title", "preparation"));
+		items.add(new Recipe(4, "Pasta", "short description of recipe",
+				"description", "Title", "preparation"));
+		items.add(new Recipe(5, "Pasta", "short description of recipe",
+				"description", "Title", "preparation"));
+		items.add(new Recipe(6, "Pasta", "short description of recipe",
+				"description", "Title", "preparation"));
+		items.add(new Recipe(7, "Pasta", "short description of recipe",
+				"description", "Title", "preparation"));
+		items.add(new Recipe(8, "Pasta", "short description of recipe",
+				"description", "Title", "preparation"));
+		items.add(new Recipe(9, "Pasta", "short description of recipe",
+				"description", "Title", "preparation"));
 
 		return items;
 	}

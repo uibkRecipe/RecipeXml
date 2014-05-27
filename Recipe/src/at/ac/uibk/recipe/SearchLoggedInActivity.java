@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
+import android.widget.Toast;
 import at.ac.uibk.recipe.adapter.SearchTabsPagerAdapter;
 
 public class SearchLoggedInActivity extends FragmentActivity implements
@@ -23,7 +24,6 @@ public class SearchLoggedInActivity extends FragmentActivity implements
 	private SearchTabsPagerAdapter mAdapter = null;
 	private ActionBar actionBar = null;
 
-
 	private String[] tabs = { "AlL", "Co2 neutral", "Vegetarian",
 			"Meat and Fish", "Flour-based" };
 
@@ -31,7 +31,7 @@ public class SearchLoggedInActivity extends FragmentActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search_logged_in);
-		
+
 		viewPager = (ViewPager) findViewById(R.id.pagerSearch);
 		actionBar = getActionBar();
 		mAdapter = new SearchTabsPagerAdapter(getSupportFragmentManager());
@@ -101,7 +101,6 @@ public class SearchLoggedInActivity extends FragmentActivity implements
 			}
 		}
 
-	
 	}
 
 	@Override
@@ -120,6 +119,20 @@ public class SearchLoggedInActivity extends FragmentActivity implements
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			return true;
+		}
+		if (id == R.id.action_logout) {
+			Toast.makeText(
+					SearchLoggedInActivity.this,
+					"Goodbye "
+							+ SaveSharedPreference
+									.getUserName(SearchLoggedInActivity.this),
+					Toast.LENGTH_LONG).show();
+			SaveSharedPreference.clearUserName(SearchLoggedInActivity.this);
+			Intent intent = new Intent(SearchLoggedInActivity.this,
+					MainActivity.class);
+			startActivity(intent);
+			finish();
+
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -173,7 +186,7 @@ public class SearchLoggedInActivity extends FragmentActivity implements
 			profile.setColorFilter(Color.WHITE);
 
 		} else if (v.getId() == R.id.favorites) {
-			
+
 			Intent intent = new Intent(SearchLoggedInActivity.this,
 					FavoritesActivity.class);
 			intent.putExtra("WHICH_TAB", actionBar.getSelectedTab().getText()
@@ -182,10 +195,13 @@ public class SearchLoggedInActivity extends FragmentActivity implements
 			overridePendingTransition(0, 0);
 
 		} else if (v.getId() == R.id.profile) {
+			Intent intent = new Intent(SearchLoggedInActivity.this,
+					ProfileActivity.class);
+			startActivity(intent);
+			overridePendingTransition(0, 0);
 
 		}
 
 	}
-
 
 }

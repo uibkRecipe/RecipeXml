@@ -39,5 +39,4 @@ public class FavoritesTabsPagerAdapter extends FragmentPagerAdapter {
 		return 5;
 	}
 
-
 }

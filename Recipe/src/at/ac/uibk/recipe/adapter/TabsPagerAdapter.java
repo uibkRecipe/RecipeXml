@@ -1,13 +1,8 @@
 package at.ac.uibk.recipe.adapter;
 
-import java.util.Vector;
-
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.view.View;
-import android.view.ViewGroup;
 import at.ac.uibk.recipe.AllFragment;
 import at.ac.uibk.recipe.Co2NeutralFragment;
 import at.ac.uibk.recipe.FlourFragment;
@@ -43,6 +38,5 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
 		// TODO Auto-generated method stub
 		return 5;
 	}
-
 
 }

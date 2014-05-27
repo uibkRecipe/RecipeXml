@@ -57,7 +57,7 @@
                 android:layout_marginTop="10dp"
                 android:gravity="left"
                 android:padding="20dp"
-                android:text="@string/searchStringMeat"
+                android:text="@string/searchStringAll"
                 android:textSize="20sp" />
 
             <EditText
@@ -68,6 +68,29 @@
                 android:inputType="text"
                 android:maxLines="1"
                 android:singleLine="true" />
+            
+             <AutoCompleteTextView
+                android:id="@+id/autocomplete_ingredients1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:completionThreshold="1"
+                android:hint="@string/ingredient" 
+                />
+             
+             <AutoCompleteTextView
+                android:id="@+id/autocomplete_ingredients2"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:completionThreshold="1"
+                android:hint="@string/ingredient"
+                 />
+             
+             <AutoCompleteTextView
+                android:id="@+id/autocomplete_ingredients3"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:completionThreshold="1"
+                android:hint="@string/ingredient" />
 
             <RelativeLayout
                 android:layout_width="fill_parent"
@@ -78,9 +101,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/seekbar"
-                    android:textSize="20sp"
                     android:layout_marginLeft="10dp"
-                    android:text="@string/searchTimeString" />
+                    android:text="@string/searchTimeString"
+                    android:textSize="20sp" />
 
                 <SeekBar
                     android:id="@+id/seekbar"
@@ -90,6 +113,8 @@
                     android:max="90" >
                 </SeekBar>
             </RelativeLayout>
+
+           
 
             <Button
                 android:id="@+id/search_button"

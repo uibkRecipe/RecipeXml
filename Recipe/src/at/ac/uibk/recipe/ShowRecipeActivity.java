@@ -5,13 +5,21 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import at.ac.uibk.Beans.Recipe;
 
-public class ShowRecipeActivity extends Activity {
+public class ShowRecipeActivity extends Activity implements OnClickListener {
 
 	private Recipe recipe = null;
+
+	private Button rate = null;
+	private Button cooked = null;
+	private RatingBar rating = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -67,18 +75,42 @@ public class ShowRecipeActivity extends Activity {
 				startActivity(intent);
 			}
 		}
-		
-		
-		TextView titleView = (TextView)findViewById(R.id.show_recipe_title);
+
+		TextView titleView = (TextView) findViewById(R.id.show_recipe_title);
 		titleView.setText(recipe.getTitle());
 
-		TextView ingredientsView = (TextView)findViewById(R.id.show_recipe_ingredient);
+		TextView ingredientsView = (TextView) findViewById(R.id.show_recipe_ingredient);
 		ingredientsView.setText(recipe.getIngredients());
 
-		TextView preparationView = (TextView)findViewById(R.id.show_recipe_preparation);
+		TextView preparationView = (TextView) findViewById(R.id.show_recipe_preparation);
 		preparationView.setText(recipe.getPreparation());
 
+		rate = (Button) findViewById(R.id.btnSubmit);
+		rate.setOnClickListener(new OnClickListener() {
 
+			@Override
+			public void onClick(View v) {
+				rating = (RatingBar) findViewById(R.id.ratingBar);
+				String stars = String.valueOf((int)rating.getRating());
+				Toast.makeText(getApplicationContext(),
+						"You rated with " + stars + " stars", Toast.LENGTH_LONG)
+						.show();
+				rating.setVisibility(View.GONE);
+				v.setVisibility(View.GONE);
+			}
+		});
+
+		cooked = (Button) findViewById(R.id.cooked);
+		cooked.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Toast.makeText(getApplicationContext(),
+						"You selected the Recipe as cooked", Toast.LENGTH_LONG)
+						.show();
+				v.setVisibility(View.GONE);
+			}
+		});
 	}
 
 	@Override
@@ -98,7 +130,27 @@ public class ShowRecipeActivity extends Activity {
 		if (id == R.id.action_settings) {
 			return true;
 		}
+		if (id == R.id.action_logout) {
+			Toast.makeText(
+					ShowRecipeActivity.this,
+					"Goodbye "
+							+ SaveSharedPreference
+									.getUserName(ShowRecipeActivity.this),
+					Toast.LENGTH_LONG).show();
+			SaveSharedPreference.clearUserName(ShowRecipeActivity.this);
+			Intent intent = new Intent(ShowRecipeActivity.this,
+					MainActivity.class);
+			startActivity(intent);
+			finish();
+
+		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

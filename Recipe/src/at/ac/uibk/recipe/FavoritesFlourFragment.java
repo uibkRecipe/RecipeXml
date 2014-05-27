@@ -20,8 +20,8 @@ public class FavoritesFlourFragment extends Fragment {
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.favorites_flour_fragment, container,
-				false);
+		View rootView = inflater.inflate(R.layout.favorites_flour_fragment,
+				container, false);
 
 		// setContentView(rootView);
 
@@ -56,12 +56,12 @@ public class FavoritesFlourFragment extends Fragment {
 
 	private ArrayList<Recipe> generateData() {
 		ArrayList<Recipe> items = new ArrayList<Recipe>();
-		items.add(new Recipe(1,"Pasta", "short description of recipe", "description",
-				"Title","preparation"));
-		items.add(new Recipe(2,"Pasta", "short description of recipe", "description",
-				"Title","preparation"));
-		items.add(new Recipe(3,"Pasta", "short description of recipe", "description",
-				"Title","preparation"));
+		items.add(new Recipe(1, "Pasta", "short description of recipe",
+				"description", "Title", "preparation"));
+		items.add(new Recipe(2, "Pasta", "short description of recipe",
+				"description", "Title", "preparation"));
+		items.add(new Recipe(3, "Pasta", "short description of recipe",
+				"description", "Title", "preparation"));
 
 		return items;
 	}

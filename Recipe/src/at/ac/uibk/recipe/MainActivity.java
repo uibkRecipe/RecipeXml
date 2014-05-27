@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -22,36 +23,47 @@ public class MainActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		final Button loginButton = (Button) findViewById(R.id.login);
-		loginButton.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
+		if (SaveSharedPreference.getUserName(MainActivity.this).length() == 0) {
+			final Button loginButton = (Button) findViewById(R.id.login);
+			loginButton.setOnClickListener(new View.OnClickListener() {
+				public void onClick(View v) {
 
-				Intent intent = new Intent(MainActivity.this,
-						LoginActivity.class);
-				startActivity(intent);
-			}
-		});
+					Intent intent = new Intent(MainActivity.this,
+							LoginActivity.class);
+					startActivity(intent);
+				}
+			});
 
-		final Button registerButton = (Button) findViewById(R.id.register);
-		registerButton.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
+			final Button registerButton = (Button) findViewById(R.id.register);
+			registerButton.setOnClickListener(new View.OnClickListener() {
+				public void onClick(View v) {
 
-				Intent intent = new Intent(MainActivity.this,
-						RegisterActivity.class);
-				startActivity(intent);
+					Intent intent = new Intent(MainActivity.this,
+							RegisterActivity.class);
+					startActivity(intent);
 
-			}
-		});
+				}
+			});
 
-		final Button searchButton = (Button) findViewById(R.id.search);
-		searchButton.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				Intent intent = new Intent(MainActivity.this,
-						SearchActivity.class);
-				startActivity(intent);
+			final Button searchButton = (Button) findViewById(R.id.search);
+			searchButton.setOnClickListener(new View.OnClickListener() {
+				public void onClick(View v) {
+					Intent intent = new Intent(MainActivity.this,
+							SearchActivity.class);
+					startActivity(intent);
 
-			}
-		});
+				}
+			});
+		} else {
+			Intent intent = new Intent(MainActivity.this,
+					LoggedInActivity.class);
+			startActivity(intent);
+
+			Toast.makeText(MainActivity.this,
+					SaveSharedPreference.getUserName(MainActivity.this),
+					Toast.LENGTH_LONG).show();
+
+		}
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			// For the main activity, make sure the app icon in the action bar
@@ -71,9 +83,7 @@ public class MainActivity extends ActionBarActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.action_search:
-			// openSearch();
-			return true;
+
 		case R.id.action_settings:
 			// openSettings();
 			return true;

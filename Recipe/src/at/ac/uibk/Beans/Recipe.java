@@ -2,10 +2,6 @@ package at.ac.uibk.Beans;
 
 import java.io.Serializable;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
-
 @SuppressWarnings("serial")
 public class Recipe implements Serializable {
 
@@ -86,8 +82,8 @@ public class Recipe implements Serializable {
 
 	public String toString() {
 		return this.id + " " + this.name + " " + this.title + " "
-				+ this.description + " " + this.ingredients + " " + this.preparation;
+				+ this.description + " " + this.ingredients + " "
+				+ this.preparation;
 	}
-
 
 }

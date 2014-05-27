@@ -1,21 +1,16 @@
 package at.ac.uibk.recipe;
 
-import android.app.Activity;
-import android.app.ActionBar;
-import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff.Mode;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
-import android.os.Build;
+import android.widget.Toast;
 
 public class SearchFoundActivity extends FragmentActivity implements
 		OnClickListener {
@@ -62,6 +57,21 @@ public class SearchFoundActivity extends FragmentActivity implements
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			return true;
+		}
+		
+		if (id == R.id.action_logout) {
+			Toast.makeText(
+					SearchFoundActivity.this,
+					"Goodbye "
+							+ SaveSharedPreference
+									.getUserName(SearchFoundActivity.this),
+					Toast.LENGTH_LONG).show();
+			SaveSharedPreference.clearUserName(SearchFoundActivity.this);
+			Intent intent = new Intent(SearchFoundActivity.this,
+					MainActivity.class);
+			startActivity(intent);
+			finish();
+
 		}
 		return super.onOptionsItemSelected(item);
 	}

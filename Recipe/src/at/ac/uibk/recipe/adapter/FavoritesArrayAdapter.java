@@ -29,16 +29,17 @@ public class FavoritesArrayAdapter extends ArrayAdapter<Recipe> {
 		LayoutInflater inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-		View rowView = inflater.inflate(R.layout.favorites_simplerow, parent, false);
+		View rowView = inflater.inflate(R.layout.favorites_simplerow, parent,
+				false);
 
 		// 3. Get the two text view from the rowView
 		TextView labelView = (TextView) rowView.findViewById(R.id.recipe_title);
-		TextView valueView = (TextView) rowView
-				.findViewById(R.id.recipe_description);
+		// TextView valueView = (TextView) rowView
+		// .findViewById(R.id.recipe_description);
 
 		// 4. Set the text for textView
 		labelView.setText(items.get(position).getTitle());
-		//valueView.setText(items.get(position).getDescription());
+		// valueView.setText(items.get(position).getDescription());
 
 		// 5. retrn rowView
 		return rowView;
