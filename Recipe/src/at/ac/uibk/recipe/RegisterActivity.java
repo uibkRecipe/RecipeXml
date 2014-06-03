@@ -1,5 +1,19 @@
 package at.ac.uibk.recipe;
 
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -15,12 +29,9 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
+import at.ac.uibk.Beans.User;
 
 public class RegisterActivity extends Activity {
-
-	private static final String[] DUMMY_CREDENTIALS = new String[] {
-			"honspeator:aaaaa:aaaaa:hannes.vieider@gmail.com:hannes:vieider",
-			"aaaaa:aaaaa:aaaaa:aaaaa:aaaaa:aaaaa" };
 
 	private UserRegisterTask mAuthTask = null;
 
@@ -196,7 +207,7 @@ public class RegisterActivity extends Activity {
 					.setText(R.string.register_progress_signing_in);
 			showProgress(true);
 			mAuthTask = new UserRegisterTask();
-			mAuthTask.execute((Void) null);
+			mAuthTask.execute();
 		}
 	}
 
@@ -237,6 +248,23 @@ public class RegisterActivity extends Activity {
 		}
 	}
 
+	public static HttpResponse doPost(String url, String string)
+			throws ClientProtocolException, IOException {
+
+		HttpClient httpclient = new DefaultHttpClient();
+		HttpPost request = new HttpPost(url);
+		StringEntity s = new StringEntity(string);
+
+		s.setContentEncoding("UTF-8");
+		s.setContentType("application/json");
+
+		request.setEntity(s);
+		request.addHeader("accept", "application/json");
+		request.addHeader("Content-type", "application/json");
+
+		return httpclient.execute(request);
+	}
+
 	/**
 	 * Represents an asynchronous login task used to register the user.
 	 */
@@ -247,16 +275,29 @@ public class RegisterActivity extends Activity {
 			} catch (InterruptedException e) {
 				return false;
 			}
-			for (String credential : DUMMY_CREDENTIALS) {
-				String[] pieces = credential.split(":");
-				if (pieces[0].equals(username) && pieces[1].equals(password)
-						&& pieces[2].equals(passwordRepeat)
-						&& pieces[3].equals(email)
-						&& pieces[4].equals(firstname)) {
-					return pieces[5].equals(lastname);
+			User simon = new User(username, password, email, firstname,
+					lastname);
+			ObjectMapper mapper = new ObjectMapper();
+			Writer strWriter = new StringWriter();
 
-				}
+			try {
+				mapper.writeValue(strWriter, simon);
+			} catch (JsonGenerationException e1) {
+				e1.printStackTrace();
+			} catch (JsonMappingException e1) {
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				e1.printStackTrace();
 			}
+			String userDataJSON = strWriter.toString();
+
+			try {
+				doPost("http://138.232.65.234:8080/RestServer/rest/user/",
+						userDataJSON);
+			} catch (ClientProtocolException e) {
+			} catch (IOException e) {
+			}
+
 			return true;
 		}
 

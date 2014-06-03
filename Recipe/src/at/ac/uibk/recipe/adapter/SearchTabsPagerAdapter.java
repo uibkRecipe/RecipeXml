@@ -10,6 +10,7 @@ import at.ac.uibk.recipe.SearchFlourFragment;
 import at.ac.uibk.recipe.SearchMeatFragment;
 import at.ac.uibk.recipe.SearchVegetarianFragment;
 
+
 public class SearchTabsPagerAdapter extends FragmentPagerAdapter {
 
 	SparseArray<Fragment> registeredFragments = new SparseArray<Fragment>();

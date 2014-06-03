@@ -1,7 +1,5 @@
 package at.ac.uibk.recipe;
 
-import java.net.URI;
-
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -18,15 +16,14 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
+import at.ac.uibk.Beans.User;
+import at.ac.uibk.recipe.api.RestApi;
 
 public class LoginActivity extends Activity {
 
-	private static final String[] DUMMY_CREDENTIALS = new String[] {
-			"honspeator:hello", "aaaaa:aaaaa" };
+	private static User loggedInUser = null;
 
-	private UserLoginTask mAuthTask = null;
-
-	private static String username = null;
+	private String username = null;
 
 	private String password = null;
 
@@ -35,6 +32,8 @@ public class LoginActivity extends Activity {
 	private View mLoginFormView = null;
 	private View mLoginStatusView = null;
 	private TextView mLoginStatusMessageView = null;
+
+	UserLoginTask user = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +78,14 @@ public class LoginActivity extends Activity {
 		return true;
 	}
 
+	public UserLoginTask getUser() {
+		return user;
+	}
+
+	public void setUser(UserLoginTask user) {
+		this.user = user;
+	}
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle action bar item clicks here. The action bar will
@@ -91,15 +98,23 @@ public class LoginActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
+	public static User getLoggedInUser() {
+		return loggedInUser;
+	}
+
+	public static void setLoggedInUser(User loggedInUser) {
+		LoginActivity.loggedInUser = loggedInUser;
+	}
+
 	/**
 	 * onclick sends username/password to the server for authentication.
 	 * 
 	 * 
 	 */
 	public void attempLogin() {
-		if (mAuthTask != null) {
-			return;
-		}
+		// if (mAuthTask != null) {
+		// return;
+		// }
 		mUsernameView.setError(null);
 		mPasswordView.setError(null);
 
@@ -128,57 +143,19 @@ public class LoginActivity extends Activity {
 			focusView = mUsernameView;
 			cancel = true;
 		}
+
 		if (cancel) {
 			focusView.requestFocus();
 		} else {
 			mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
 			showProgress(true);
 
-//			ClientConfig config = new DefaultClientConfig();
-//			Client client = Client.create(config);
-//			WebResource service = client.resource(getBaseURI());
-//
-//			String loginString = (service.path("rest").path("user").path("login")
-//					.path(username).path(password)
-//					.accept(MediaType.APPLICATION_JSON).get(String.class));
-//			ObjectMapper mapper = new ObjectMapper();
-//			
-//
-//			boolean login = false;
-//			try {
-//				login = mapper.readValue(test2, boolean.class);
-//			} catch (JsonParseException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			} catch (JsonMappingException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//
-//			if(login){
-//				Intent intent = new Intent(LoginActivity.this,
-//						LoggedInActivity.class);
-//
-//				SaveSharedPreference.setUserName(LoginActivity.this, username);
-//
-//				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
-//						| Intent.FLAG_ACTIVITY_NEW_TASK);
-//				startActivity(intent);
-//				finish();
-//				
-//			}else{
-//				Toast.makeText(LoginActivity.this, "Password or Username incorrect", Toast.LENGTH_LONG).show();
-//			}
-			// mAuthTask = new UserLoginTask();
-			// mAuthTask.execute((Void) null);
-		}
-	}
+			user = new UserLoginTask();
 
-	public static String getUsername() {
-		return username;
+			user.execute();
+
+		}
+
 	}
 
 	/**
@@ -221,53 +198,64 @@ public class LoginActivity extends Activity {
 	 * Represents an asynchronous login/registration task used to authenticate
 	 * the user.
 	 */
-	public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-		protected Boolean doInBackground(Void... params) {
+
+	private class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+		private User result;
+
+		@Override
+		protected Boolean doInBackground(Void... urls) {
 			try {
 				Thread.sleep(2000);
 			} catch (InterruptedException e) {
+				return null;
+			}
+			User o = RestApi.getInstance().login(username, password);
+
+			if (o != null) {
+				result = o;
+				return true;
+			} else {
+				result = null;
 				return false;
 			}
-			for (String credential : DUMMY_CREDENTIALS) {
-				String[] pieces = credential.split(":");
-				if (pieces[0].equals(username)) {
 
-					return pieces[1].equals(password);
-				}
-			}
-			return true;
+		}
+
+		public User getResult() {
+			return result;
 		}
 
 		protected void onPostExecute(final Boolean success) {
-			mAuthTask = null;
+			user = null;
+
 			showProgress(false);
 
 			if (success) {
 
 				Intent intent = new Intent(LoginActivity.this,
 						LoggedInActivity.class);
-
-				SaveSharedPreference.setUserName(LoginActivity.this, username);
-
 				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
 						| Intent.FLAG_ACTIVITY_NEW_TASK);
 				startActivity(intent);
+
+				loggedInUser = getResult();
+
 				finish();
+
 			} else {
 				mPasswordView
 						.setError(getString(R.string.error_incorrect_password));
-				mPasswordView.requestFocus();
+				mUsernameView
+						.setError(getString(R.string.error_incorrect_password));
+				mUsernameView.requestFocus();
 			}
+
 		}
 
 		protected void onCancelled() {
-			mAuthTask = null;
+			user = null;
 			showProgress(false);
 		}
 	}
 
-//	private static URI getBaseURI() {
-//		return UriBuilder.fromUri("http://138.232.65.234:8080/RestServer/")
-//				.build();
-//	}
 }

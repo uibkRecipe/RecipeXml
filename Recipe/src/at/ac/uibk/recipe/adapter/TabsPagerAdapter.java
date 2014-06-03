@@ -9,6 +9,7 @@ import at.ac.uibk.recipe.FlourFragment;
 import at.ac.uibk.recipe.MeatFragment;
 import at.ac.uibk.recipe.VegetarianFragment;
 
+
 public class TabsPagerAdapter extends FragmentPagerAdapter {
 
 	public TabsPagerAdapter(FragmentManager fm) {

@@ -59,8 +59,11 @@ public class ProfileActivity extends FragmentActivity implements
 		profile.setImageResource(R.drawable.ic_action_person_selected);
 
 		TextView username = (TextView) findViewById(R.id.username);
-		username.setText(LoginActivity.getUsername());
-	}
+		username.setText(LoginActivity.getLoggedInUser().getUsername());
+		
+		
+		
+}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

@@ -1,7 +1,6 @@
 package at.ac.uibk.recipe.adapter;
 
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import at.ac.uibk.recipe.FavoritesAllFragment;
 import at.ac.uibk.recipe.FavoritesCo2NeutralFragment;
@@ -9,9 +8,10 @@ import at.ac.uibk.recipe.FavoritesFlourFragment;
 import at.ac.uibk.recipe.FavoritesMeatFragment;
 import at.ac.uibk.recipe.FavoritesVegetarianFragment;
 
+
 public class FavoritesTabsPagerAdapter extends FragmentPagerAdapter {
 
-	public FavoritesTabsPagerAdapter(FragmentManager fm) {
+	public FavoritesTabsPagerAdapter(android.support.v4.app.FragmentManager fm) {
 		super(fm);
 	}
 
