@@ -5,10 +5,10 @@ public class User {
 	private String username;
 	private String password;
 	private String email;
-	private String firstname;
-	private String lastname;
-	private int isActive;
-	private byte[] foto;
+	private String firstname ;
+	private String lastname ;
+	private int isActive ;
+	private byte[] foto = null;
 	
 	
 

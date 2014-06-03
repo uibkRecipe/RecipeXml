@@ -1,15 +1,20 @@
 package at.ac.uibk.recipe;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PorterDuff.Mode;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -60,10 +65,22 @@ public class ProfileActivity extends FragmentActivity implements
 
 		TextView username = (TextView) findViewById(R.id.username);
 		username.setText(LoginActivity.getLoggedInUser().getUsername());
-		
-		
-		
-}
+
+		if (LoginActivity.getLoggedInUser().getFoto() != null
+				&& LoginActivity.getLoggedInUser().getFoto().length > 0) {
+			ImageView img = (ImageView) findViewById(R.id.user_image);
+			Bitmap bm = BitmapFactory.decodeByteArray(LoginActivity
+					.getLoggedInUser().getFoto(), 0, LoginActivity
+					.getLoggedInUser().getFoto().length);
+			DisplayMetrics dm = new DisplayMetrics();
+			getWindowManager().getDefaultDisplay().getMetrics(dm);
+
+			img.setMinimumHeight(dm.heightPixels);
+			img.setMinimumWidth(dm.widthPixels);
+			img.setImageBitmap(bm);
+		}
+
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -90,8 +107,7 @@ public class ProfileActivity extends FragmentActivity implements
 									.getUserName(ProfileActivity.this),
 					Toast.LENGTH_LONG).show();
 			SaveSharedPreference.clearUserName(ProfileActivity.this);
-			Intent intent = new Intent(ProfileActivity.this,
-					MainActivity.class);
+			Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
 			startActivity(intent);
 			finish();
 
