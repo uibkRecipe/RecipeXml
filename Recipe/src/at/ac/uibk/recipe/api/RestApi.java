@@ -1,11 +1,13 @@
 package at.ac.uibk.recipe.api;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.List;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -19,10 +21,14 @@ import org.apache.http.util.EntityUtils;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
 
+import android.provider.MediaStore.Files;
 import at.ac.uibk.Beans.User;
 
 public class RestApi {
+
+	private static final String URLBASE = "http://138.232.65.234:8080/RestServer2/rest/manager/";
 
 	private static RestApi instance;
 
@@ -43,8 +49,7 @@ public class RestApi {
 	 ****************************************************************/
 
 	public User login(String username, String password) {
-		String test = doGet("http://138.232.65.234:8080/RestServer2/rest/manager/login/"
-				+ username + "/" + password);
+		String test = doGet(URLBASE + "login/" + username + "/" + password);
 		ObjectMapper mapper = new ObjectMapper();
 		System.out.println(test);
 		User o = null;
@@ -58,8 +63,11 @@ public class RestApi {
 	}
 
 	public Boolean addUser(String username, String password, String email,
-			String firstname, String lastname) {
+			String firstname, String lastname, byte[] foto) {
+
 		User newUser = new User(username, password, email, firstname, lastname);
+		newUser.setIsActive(1);
+		newUser.setFoto(foto);
 		ObjectMapper mapper = new ObjectMapper();
 		Writer strWriter = new StringWriter();
 
@@ -80,9 +88,7 @@ public class RestApi {
 		String userDataJSON = strWriter.toString();
 
 		try {
-			HttpResponse response1 = doPost(
-					"http://138.232.65.234:8080/RestServer2/rest/manager/register",
-					userDataJSON);
+			HttpResponse response1 = doPost(URLBASE + "register", userDataJSON);
 			System.out.println(response1.getStatusLine().toString());
 			HttpEntity entity = response1.getEntity();
 			if (entity != null) {
@@ -98,7 +104,51 @@ public class RestApi {
 			e.printStackTrace();
 		}
 
-		return false;
+		return ret;
+	}
+
+	public Boolean addUser(String username, String password, String email,
+			String firstname, String lastname) {
+
+		User newUser = new User(username, password, email, firstname, lastname);
+		newUser.setIsActive(1);
+		ObjectMapper mapper = new ObjectMapper();
+		Writer strWriter = new StringWriter();
+
+		Boolean ret = false;
+
+		try {
+			mapper.writeValue(strWriter, newUser);
+		} catch (JsonGenerationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (JsonMappingException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		String userDataJSON = strWriter.toString();
+
+		try {
+			HttpResponse response1 = doPost(URLBASE + "register", userDataJSON);
+			System.out.println(response1.getStatusLine().toString());
+			HttpEntity entity = response1.getEntity();
+			if (entity != null) {
+				String retSrc = EntityUtils.toString(entity);
+				ret = mapper.readValue(retSrc, Boolean.class);
+			}
+
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return ret;
 	}
 
 	/****************************************************************
@@ -107,17 +157,23 @@ public class RestApi {
 	 * 
 	 ****************************************************************/
 
-	public boolean getCountryList() {
-		String test = doGet("http://138.232.65.234:8080/RestServer/rest/country");
+	public List<String> getCountryList() {
+		String test = doGet(URLBASE + "country");
+		System.out.println(test);
 		ObjectMapper mapper = new ObjectMapper();
-		Boolean o = null;
+		List<String> countries = null;
 		try {
-			o = mapper.readValue(test, Boolean.class);
+			countries = mapper.readValue(test,
+					new TypeReference<List<String>>() {
+					});
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return o;
+		for (String s : countries) {
+			System.out.println("hoi" + s);
+		}
+		return countries;
 	}
 
 	public boolean getCountryByCode(String countryCode) {

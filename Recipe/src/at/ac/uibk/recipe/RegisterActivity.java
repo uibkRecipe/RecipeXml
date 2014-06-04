@@ -1,8 +1,10 @@
 package at.ac.uibk.recipe;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
+import java.io.InputStream;
+import java.util.Arrays;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -10,28 +12,46 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.view.KeyEvent;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
+import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import at.ac.uibk.Beans.User;
+import at.ac.uibk.recipe.api.RestApi;
 
 public class RegisterActivity extends Activity {
+
+	private static final int SELECT_PICTURE = 1;
+
+	private String selectedImagePath;
+	private String filemanagerstring;
+
+	/**
+	 * stadt bild speichern
+	 * 
+	 * register mit db verbinden
+	 */
 
 	private UserRegisterTask mAuthTask = null;
 
@@ -41,6 +61,9 @@ public class RegisterActivity extends Activity {
 	private String email = null;
 	private String firstname = null;
 	private String lastname = null;
+	private String country = null;
+	private String city = null;
+	private byte[] foto = null;
 
 	private EditText mUsernameView = null;
 	private EditText mPasswordView = null;
@@ -48,10 +71,18 @@ public class RegisterActivity extends Activity {
 	private EditText mEmailView = null;
 	private EditText mFirstnameView = null;
 	private EditText mLastnameView = null;
+	private EditText mCountryView = null;
+	private EditText mCityView = null;
 
 	private View mRegisterFormView = null;
 	private View mRegisterStatusView = null;
 	private TextView mRegisterStatusMessageView = null;
+
+	private TextView textview = null;
+
+	String[] cities = null;
+	String[] countries = null;
+	private AutoCompleteTextView autoComplete1, autoComplete2;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -64,19 +95,12 @@ public class RegisterActivity extends Activity {
 		mEmailView = (EditText) findViewById(R.id.emailRegister);
 		mFirstnameView = (EditText) findViewById(R.id.firstnameRegister);
 		mLastnameView = (EditText) findViewById(R.id.lastnameRegister);
+		mCountryView = (AutoCompleteTextView) findViewById(R.id.autocomplete_country);
+		mCityView = (AutoCompleteTextView) findViewById(R.id.autocomplete_city);
 
-		mLastnameView
-				.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+		cities = getResources().getStringArray(R.array.city_array);
 
-					@Override
-					public boolean onEditorAction(TextView v, int actionId,
-							KeyEvent event) {
-						if (actionId == R.id.register
-								|| actionId == EditorInfo.IME_NULL)
-							attempRegister();
-						return false;
-					}
-				});
+		countries = getResources().getStringArray(R.array.country_array);
 
 		mRegisterFormView = findViewById(R.id.register_form);
 		mRegisterStatusView = findViewById(R.id.register_status);
@@ -89,6 +113,43 @@ public class RegisterActivity extends Activity {
 						attempRegister();
 					}
 				});
+
+		ColorStateList colors = mLastnameView.getHintTextColors();
+		textview = (TextView) findViewById(R.id.selected_image);
+		textview.setTextColor(colors);
+
+		((Button) findViewById(R.id.select_image))
+				.setOnClickListener(new OnClickListener() {
+
+					public void onClick(View arg0) {
+
+						// in onCreate or any event where your want the user to
+						// select a file
+						Intent intent = new Intent();
+						intent.setType("image/*");
+						intent.setAction(Intent.ACTION_GET_CONTENT);
+						startActivityForResult(
+								Intent.createChooser(intent, "Select Picture"),
+								SELECT_PICTURE);
+
+					}
+				});
+
+		// Get a reference to the AutoCompleteTextView in the layout
+		autoComplete1 = (AutoCompleteTextView) findViewById(R.id.autocomplete_city);
+
+		// Create the adapter and set it to the AutoCompleteTextView
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+				android.R.layout.simple_list_item_1, cities);
+		autoComplete1.setAdapter(adapter);
+
+		// Get a reference to the AutoCompleteTextView in the layout
+		autoComplete2 = (AutoCompleteTextView) findViewById(R.id.autocomplete_country);
+
+		// Create the adapter and set it to the AutoCompleteTextView
+		adapter = new ArrayAdapter<String>(this,
+				android.R.layout.simple_list_item_1, countries);
+		autoComplete2.setAdapter(adapter);
 
 	}
 
@@ -122,6 +183,8 @@ public class RegisterActivity extends Activity {
 		mEmailView.setError(null);
 		mFirstnameView.setError(null);
 		mLastnameView.setError(null);
+		mCityView.setError(null);
+		mCountryView.setError(null);
 
 		username = mUsernameView.getText().toString();
 		password = mPasswordView.getText().toString();
@@ -129,6 +192,8 @@ public class RegisterActivity extends Activity {
 		email = mEmailView.getText().toString();
 		firstname = mFirstnameView.getText().toString();
 		lastname = mLastnameView.getText().toString();
+		country = mCountryView.getText().toString();
+		city = mCityView.getText().toString();
 
 		boolean cancel = false;
 		View focusView = null;
@@ -199,6 +264,26 @@ public class RegisterActivity extends Activity {
 			focusView = mLastnameView;
 			cancel = true;
 		}
+		if (TextUtils.isEmpty(country)) {
+			mCountryView.setError(getString(R.string.error_field_required));
+			focusView = mCountryView;
+			cancel = true;
+
+		} else if (!Arrays.asList(countries).contains(country)) {
+			mCountryView.setError(getString(R.string.error_country_invalid));
+			focusView = mCountryView;
+			cancel = true;
+		}
+		if (TextUtils.isEmpty(city)) {
+			mCityView.setError(getString(R.string.error_field_required));
+			focusView = mCityView;
+			cancel = true;
+
+		} else if (!Arrays.asList(cities).contains(city)) {
+			mCityView.setError(getString(R.string.error_city_invalid));
+			focusView = mCityView;
+			cancel = true;
+		}
 
 		if (cancel) {
 			focusView.requestFocus();
@@ -265,6 +350,81 @@ public class RegisterActivity extends Activity {
 		return httpclient.execute(request);
 	}
 
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (resultCode == RESULT_OK) {
+			if (requestCode == SELECT_PICTURE) {
+				Uri selectedImageUri = data.getData();
+
+				// OI FILE Manager
+				filemanagerstring = selectedImageUri.getPath();
+
+				// MEDIA GALLERY
+				selectedImagePath = getPath(selectedImageUri);
+
+				// DEBUG PURPOSE - you can delete this if you want
+				if (selectedImagePath != null)
+					Log.i("ABCD", selectedImagePath);
+				else
+					Log.i("ABCD", "selectedImagePath is null");
+				if (filemanagerstring != null)
+					Log.i("ABCD", filemanagerstring);
+				else
+					Log.i("ABCD", "filemanagerstring is null");
+
+				Bitmap myBitmap = null;
+				// NOW WE HAVE OUR WANTED STRING
+				if (selectedImagePath != null) {
+					textview.setText(selectedImagePath + " ");
+					InputStream is;
+					try {
+						is = this.getContentResolver().openInputStream(
+								selectedImageUri);
+						myBitmap = BitmapFactory.decodeStream(is);
+					} catch (FileNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+					ByteArrayOutputStream stream = new ByteArrayOutputStream();
+					myBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+					foto = stream.toByteArray();
+				} else {
+					textview.setText(filemanagerstring + " ");
+					InputStream is;
+					try {
+						is = this.getContentResolver().openInputStream(
+								selectedImageUri);
+						myBitmap = BitmapFactory.decodeStream(is);
+					} catch (FileNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+					ByteArrayOutputStream stream = new ByteArrayOutputStream();
+					myBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+					foto = stream.toByteArray();
+					Log.i("ABCD", "filemanagerstring is the right one for you!");
+				}
+
+			}
+		}
+	}
+
+	// UPDATED!
+	public String getPath(Uri uri) {
+		String[] projection = { MediaStore.Images.Media.DATA };
+		Cursor cursor = managedQuery(uri, projection, null, null, null);
+		if (cursor != null) {
+			// HERE YOU WILL GET A NULLPOINTER IF CURSOR IS NULL
+			// THIS CAN BE, IF YOU USED OI FILE MANAGER FOR PICKING THE MEDIA
+			int column_index = cursor
+					.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+			cursor.moveToFirst();
+			return cursor.getString(column_index);
+		} else
+			return null;
+	}
+
 	/**
 	 * Represents an asynchronous login task used to register the user.
 	 */
@@ -275,30 +435,20 @@ public class RegisterActivity extends Activity {
 			} catch (InterruptedException e) {
 				return false;
 			}
-			User simon = new User(username, password, email, firstname,
-					lastname);
-			ObjectMapper mapper = new ObjectMapper();
-			Writer strWriter = new StringWriter();
 
-			try {
-				mapper.writeValue(strWriter, simon);
-			} catch (JsonGenerationException e1) {
-				e1.printStackTrace();
-			} catch (JsonMappingException e1) {
-				e1.printStackTrace();
-			} catch (IOException e1) {
-				e1.printStackTrace();
+			if (selectedImagePath != null) {
+
+			} else {
+
 			}
-			String userDataJSON = strWriter.toString();
+			Boolean o = RestApi.getInstance().addUser(username, password,
+					email, firstname, lastname, foto);
 
-			try {
-				doPost("http://138.232.65.234:8080/RestServer/rest/user/",
-						userDataJSON);
-			} catch (ClientProtocolException e) {
-			} catch (IOException e) {
+			if (o == null) {
+				return false;
+
 			}
-
-			return true;
+			return o;
 		}
 
 		protected void onPostExecute(final Boolean success) {

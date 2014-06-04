@@ -17,6 +17,9 @@
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">Password or username is incorrect</string>
     <string name="error_field_required">This field is required</string>
+    <string name="error_city_invalid">This city is invalid</string>
+    <string name="error_country_invalid">This country is invalid</string>
+    
     <string name="error_invalid_username">This username is to short</string>
     <string name="error_field_name">This name is too short</string>
     <string name="promp_firstname">Firstname</string>

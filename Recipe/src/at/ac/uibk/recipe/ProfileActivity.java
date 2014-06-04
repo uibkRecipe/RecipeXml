@@ -68,6 +68,9 @@ public class ProfileActivity extends FragmentActivity implements
 
 		if (LoginActivity.getLoggedInUser().getFoto() != null
 				&& LoginActivity.getLoggedInUser().getFoto().length > 0) {
+			
+			
+			
 			ImageView img = (ImageView) findViewById(R.id.user_image);
 			Bitmap bm = BitmapFactory.decodeByteArray(LoginActivity
 					.getLoggedInUser().getFoto(), 0, LoginActivity
