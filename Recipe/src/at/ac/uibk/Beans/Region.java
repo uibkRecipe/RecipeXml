@@ -7,6 +7,7 @@ public class Region {
 	String code;
 	double latitude;
 	double longitude;
+	int cities; //number of cities of this region
 	
 	public Region(){
 		
@@ -51,7 +52,13 @@ public class Region {
 		this.code = code;
 	}
 	
+	public void setCities(int cities){
+		this.cities = cities;
+	}
 	
+	public int getCities(){
+		return cities;
+	}
 	
 	public String toString(){
 		return "(" + this.name + "," + this.code +  ")";

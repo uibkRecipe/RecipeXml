@@ -1,5 +1,6 @@
 package at.ac.uibk.Beans;
 
+
 public class City {
 	int ID;
 	String country;
@@ -7,6 +8,7 @@ public class City {
 	String name;
 	double latitude;
 	double longitude;
+
 	
 	public City(){}
 	
@@ -49,5 +51,12 @@ public class City {
 	
 	public String toString(){
 		return this.name;
+	}
+	public boolean equals(Object o){
+		City c = (City) o;
+		if(c.latitude == this.latitude && c.longitude == this.longitude)
+			return true;
+		else 
+			return false;
 	}
 }

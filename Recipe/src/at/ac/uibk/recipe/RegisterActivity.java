@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -33,27 +34,42 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.AdapterView.OnItemClickListener;
+import at.ac.uibk.Beans.City;
+import at.ac.uibk.Beans.Country;
+import at.ac.uibk.Beans.Region;
 import at.ac.uibk.recipe.api.RestApi;
 
+
+
+/**
+ * Only JPEG fotos can be uploaded now. 
+ * See if you can read the type out of bitmap to change form jpeg to png
+ * 
+ * 
+ * 
+ * @author Hannes
+ *
+ */
 public class RegisterActivity extends Activity {
 
 	private static final int SELECT_PICTURE = 1;
 
+	private List<City> cityList = null;
+	private List<Region> regionList = null;
+
 	private String selectedImagePath;
 	private String filemanagerstring;
 
-	/**
-	 * stadt bild speichern
-	 * 
-	 * register mit db verbinden
-	 */
-
 	private UserRegisterTask mAuthTask = null;
+	private UserCities mUserCitiesTask = null;
+	private UserRegion mUserRegionTask = null;
 
 	private String username = null;
 	private String password = null;
@@ -62,8 +78,15 @@ public class RegisterActivity extends Activity {
 	private String firstname = null;
 	private String lastname = null;
 	private String country = null;
+	private Country countryCount = null;
+	private Region regionCount = null;
+	private City cityCit = null;
+
 	private String city = null;
+	private String region = null;
 	private byte[] foto = null;
+
+	ArrayAdapter<String> adapter = null;
 
 	private EditText mUsernameView = null;
 	private EditText mPasswordView = null;
@@ -73,6 +96,7 @@ public class RegisterActivity extends Activity {
 	private EditText mLastnameView = null;
 	private EditText mCountryView = null;
 	private EditText mCityView = null;
+	private EditText mRegionView = null;
 
 	private View mRegisterFormView = null;
 	private View mRegisterStatusView = null;
@@ -81,8 +105,9 @@ public class RegisterActivity extends Activity {
 	private TextView textview = null;
 
 	String[] cities = null;
-	String[] countries = null;
-	private AutoCompleteTextView autoComplete1, autoComplete2;
+	String[] regions = null;
+
+	private AutoCompleteTextView autoComplete1, autoComplete2, autoComplete3;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -96,11 +121,12 @@ public class RegisterActivity extends Activity {
 		mFirstnameView = (EditText) findViewById(R.id.firstnameRegister);
 		mLastnameView = (EditText) findViewById(R.id.lastnameRegister);
 		mCountryView = (AutoCompleteTextView) findViewById(R.id.autocomplete_country);
+		mRegionView = (AutoCompleteTextView) findViewById(R.id.autocomplete_region);
 		mCityView = (AutoCompleteTextView) findViewById(R.id.autocomplete_city);
 
 		cities = getResources().getStringArray(R.array.city_array);
 
-		countries = getResources().getStringArray(R.array.country_array);
+		// countries = getResources().getStringArray(R.array.country_array);
 
 		mRegisterFormView = findViewById(R.id.register_form);
 		mRegisterStatusView = findViewById(R.id.register_status);
@@ -136,20 +162,44 @@ public class RegisterActivity extends Activity {
 				});
 
 		// Get a reference to the AutoCompleteTextView in the layout
-		autoComplete1 = (AutoCompleteTextView) findViewById(R.id.autocomplete_city);
-
-		// Create the adapter and set it to the AutoCompleteTextView
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_list_item_1, cities);
-		autoComplete1.setAdapter(adapter);
-
-		// Get a reference to the AutoCompleteTextView in the layout
 		autoComplete2 = (AutoCompleteTextView) findViewById(R.id.autocomplete_country);
 
 		// Create the adapter and set it to the AutoCompleteTextView
 		adapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_list_item_1, countries);
+				android.R.layout.simple_list_item_1, MainActivity.countries);
 		autoComplete2.setAdapter(adapter);
+
+		autoComplete2.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+
+				country = mCountryView.getText().toString();
+
+				for (Country c : MainActivity.o) {
+					if (c.getName().equals(country))
+						countryCount = c;
+				}
+
+				mUserRegionTask = new UserRegion();
+				mUserRegionTask.execute();
+
+				// mUserCitiesTask = new UserCities();
+				// mUserCitiesTask.execute();
+
+			}
+		});
+
+		// // Get a reference to the AutoCompleteTextView in the layout
+		// autoComplete1 = (AutoCompleteTextView)
+		// findViewById(R.id.autocomplete_city);
+		//
+		// // Create the adapter and set it to the AutoCompleteTextView
+		// adapter = new ArrayAdapter<String>(this,
+		// android.R.layout.simple_list_item_1, cities);
+		//
+		// autoComplete1.setAdapter(adapter);
 
 	}
 
@@ -185,6 +235,7 @@ public class RegisterActivity extends Activity {
 		mLastnameView.setError(null);
 		mCityView.setError(null);
 		mCountryView.setError(null);
+		mRegionView.setError(null);
 
 		username = mUsernameView.getText().toString();
 		password = mPasswordView.getText().toString();
@@ -194,6 +245,7 @@ public class RegisterActivity extends Activity {
 		lastname = mLastnameView.getText().toString();
 		country = mCountryView.getText().toString();
 		city = mCityView.getText().toString();
+		region = mRegionView.getText().toString();
 
 		boolean cancel = false;
 		View focusView = null;
@@ -269,11 +321,23 @@ public class RegisterActivity extends Activity {
 			focusView = mCountryView;
 			cancel = true;
 
-		} else if (!Arrays.asList(countries).contains(country)) {
+		} else if (!Arrays.asList(MainActivity.countries).contains(country)) {
 			mCountryView.setError(getString(R.string.error_country_invalid));
 			focusView = mCountryView;
 			cancel = true;
 		}
+
+		if (TextUtils.isEmpty(region)) {
+			mRegionView.setError(getString(R.string.error_field_required));
+			focusView = mRegionView;
+			cancel = true;
+
+		} else if (!Arrays.asList(regions).contains(region)) {
+			mRegionView.setError(getString(R.string.error_city_invalid));
+			focusView = mRegionView;
+			cancel = true;
+		}
+
 		if (TextUtils.isEmpty(city)) {
 			mCityView.setError(getString(R.string.error_field_required));
 			focusView = mCityView;
@@ -288,6 +352,20 @@ public class RegisterActivity extends Activity {
 		if (cancel) {
 			focusView.requestFocus();
 		} else {
+
+			int i = 0;
+			for (String c : cities) {
+
+				if (c.equals(city)) {
+
+					break;
+				}
+				i++;
+			}
+
+			System.out.println(i);
+			cityCit = cityList.get(i);
+
 			mRegisterStatusMessageView
 					.setText(R.string.register_progress_signing_in);
 			showProgress(true);
@@ -354,7 +432,6 @@ public class RegisterActivity extends Activity {
 		if (resultCode == RESULT_OK) {
 			if (requestCode == SELECT_PICTURE) {
 				Uri selectedImageUri = data.getData();
-
 				// OI FILE Manager
 				filemanagerstring = selectedImageUri.getPath();
 
@@ -374,8 +451,10 @@ public class RegisterActivity extends Activity {
 				Bitmap myBitmap = null;
 				// NOW WE HAVE OUR WANTED STRING
 				if (selectedImagePath != null) {
+
 					textview.setText(selectedImagePath + " ");
 					InputStream is;
+
 					try {
 						is = this.getContentResolver().openInputStream(
 								selectedImageUri);
@@ -386,23 +465,46 @@ public class RegisterActivity extends Activity {
 					}
 
 					ByteArrayOutputStream stream = new ByteArrayOutputStream();
-					myBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+
+					myBitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream);
+					myBitmap.recycle();
 					foto = stream.toByteArray();
+
+					try {
+						stream.close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				} else {
+
 					textview.setText(filemanagerstring + " ");
+
 					InputStream is;
 					try {
 						is = this.getContentResolver().openInputStream(
 								selectedImageUri);
 						myBitmap = BitmapFactory.decodeStream(is);
+
 					} catch (FileNotFoundException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 
 					ByteArrayOutputStream stream = new ByteArrayOutputStream();
-					myBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+
+					myBitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream);
+					myBitmap.recycle();
+
 					foto = stream.toByteArray();
+
+					try {
+						stream.close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
 					Log.i("ABCD", "filemanagerstring is the right one for you!");
 				}
 
@@ -435,15 +537,19 @@ public class RegisterActivity extends Activity {
 			} catch (InterruptedException e) {
 				return false;
 			}
+			Boolean o = false;
 
-			if (selectedImagePath != null) {
+			if (foto == null) {
 
+				// in countryCount is country name witht type Country
+
+				System.out.println(lastname);
+				o = RestApi.getInstance().addUser(username, password, email,
+						firstname, lastname, cityCit);
 			} else {
-
+				o = RestApi.getInstance().addUser(username, password, email,
+						firstname, lastname, foto, cityCit);
 			}
-			Boolean o = RestApi.getInstance().addUser(username, password,
-					email, firstname, lastname, foto);
-
 			if (o == null) {
 				return false;
 
@@ -472,6 +578,147 @@ public class RegisterActivity extends Activity {
 		protected void onCancelled() {
 			mAuthTask = null;
 			showProgress(false);
+		}
+	}
+
+	public class UserRegion extends AsyncTask<Void, Void, Boolean> {
+		private String[] resultRegion = null;
+
+		@Override
+		protected Boolean doInBackground(Void... urls) {
+
+			regionList = RestApi.getInstance().findRegionByCountryCode(
+					countryCount.getCode());
+
+			resultRegion = new String[regionList.size()];
+			regions = new String[resultRegion.length];
+
+			if (regionList != null) {
+				int i = 0;
+				for (Region c : regionList) {
+					resultRegion[i] = c.getName();
+					i++;
+				}
+				return true;
+			} else {
+				resultRegion = null;
+				// resultCity = null;
+				return false;
+			}
+
+		}
+
+		public String[] getResultRegion() {
+			return resultRegion;
+		}
+
+		protected void onPostExecute(final Boolean success) {
+
+			if (success) {
+
+				regions = getResultRegion();
+
+				// Get a reference to the AutoCompleteTextView in the layout
+				autoComplete3 = (AutoCompleteTextView) findViewById(R.id.autocomplete_region);
+
+				// Create the adapter and set it to the AutoCompleteTextView
+				adapter = new ArrayAdapter<String>(RegisterActivity.this,
+						android.R.layout.simple_list_item_1, regions);
+				autoComplete3.setAdapter(adapter);
+
+				autoComplete3.setOnItemClickListener(new OnItemClickListener() {
+
+					@Override
+					public void onItemClick(AdapterView<?> parent, View view,
+							int position, long id) {
+
+						region = mRegionView.getText().toString();
+
+						for (Region c : regionList) {
+							if (c.getName().equals(region))
+								regionCount = c;
+						}
+
+						mUserCitiesTask = new UserCities();
+						mUserCitiesTask.execute();
+
+					}
+				});
+
+			} else {
+				regions[0] = "Error finding regions!";
+				// cities[0] = "false";
+
+			}
+		}
+
+		protected void onCancelled() {
+			mUserCitiesTask = null;
+
+		}
+	}
+
+	public class UserCities extends AsyncTask<Void, Void, Boolean> {
+		private String[] resultCities = null;
+
+		@Override
+		protected Boolean doInBackground(Void... urls) {
+
+			cityList = RestApi.getInstance().findCityByCountryAndRegion(
+					countryCount.getCode(), regionCount.getCode());
+
+			resultCities = new String[cityList.size()];
+			cities = new String[resultCities.length];
+
+			if (cityList != null) {
+				int i = 0;
+				for (City c : cityList) {
+					resultCities[i] = c.getName();
+					i++;
+				}
+				Log.e("ABCD", resultCities[10] + " ");
+				return true;
+			} else {
+				resultCities = null;
+				// resultCity = null;
+				return false;
+			}
+
+		}
+
+		public String[] getResultCities() {
+			return resultCities;
+		}
+
+		// public String[] getResultCity() {
+		// return resultCity;
+		// }
+
+		protected void onPostExecute(final Boolean success) {
+
+			if (success) {
+
+				cities = getResultCities();
+				Log.e("ABCD", cities[10] + " ");
+
+				// Get a reference to the AutoCompleteTextView in the layout
+				autoComplete1 = (AutoCompleteTextView) findViewById(R.id.autocomplete_city);
+
+				// Create the adapter and set it to the AutoCompleteTextView
+				adapter = new ArrayAdapter<String>(RegisterActivity.this,
+						android.R.layout.simple_list_item_1, cities);
+				autoComplete1.setAdapter(adapter);
+
+			} else {
+				cities[0] = "Error finding countries!";
+				// cities[0] = "false";
+
+			}
+		}
+
+		protected void onCancelled() {
+			mUserCitiesTask = null;
+
 		}
 	}
 }

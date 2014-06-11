@@ -14,7 +14,7 @@
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_register">RegisterActivity</string>
     <string name="title_activity_search">SearchActivity</string>
-    <string name="registerString">Please fill in all fields. Your input will be transferred encryptedly</string>
+    <string name="registerString">Please fill in all fields. All fields are required. Foto is not required, but if you want to upload a Foto please dont use more than a 2MP camera. </string>
     <string name="search_hint">Search</string>
     <string name="title_activity_search_result">Search</string>
     <string name="title_activity_logged_in">Recipe</string>
@@ -49,6 +49,7 @@
     <string name="country_prompt">Choose a country</string>
     <string name="ingredient">Ingredient</string>
     <string name="country">Country</string>
+    <string name="region">Region</string>
     <string name="city">City</string>
 
     <string-array name="ingredients_array">

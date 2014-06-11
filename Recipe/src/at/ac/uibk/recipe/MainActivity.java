@@ -1,13 +1,17 @@
 package at.ac.uibk.recipe;
 
+import java.util.List;
+
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,8 +19,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
+import at.ac.uibk.Beans.City;
+import at.ac.uibk.Beans.Country;
+import at.ac.uibk.recipe.api.RestApi;
 
 public class MainActivity extends ActionBarActivity {
+
+	static String[] countries = null;
+	static String[] cities = null;
+
+	static List<Country> o = null;
+	
+	UserCountries mUserCountrie = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +52,8 @@ public class MainActivity extends ActionBarActivity {
 			registerButton.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
 
-					Intent intent = new Intent(MainActivity.this,
-							RegisterActivity.class);
-					startActivity(intent);
+					mUserCountrie = new UserCountries();
+					mUserCountrie.execute();
 
 				}
 			});
@@ -158,5 +171,63 @@ public class MainActivity extends ActionBarActivity {
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
 		// first call
 		super.onRestoreInstanceState(savedInstanceState);
+	}
+
+	public class UserCountries extends AsyncTask<Void, Void, Boolean> {
+		private String[] resultCountry = null;
+
+		@Override
+		protected Boolean doInBackground(Void... urls) {
+
+			o = RestApi.getInstance().getCountryList();
+
+			resultCountry = new String[o.size()];
+			countries = new String[resultCountry.length];
+			
+			if (o != null) {
+				int i = 0;
+				for (Country c : o) {
+					resultCountry[i] = c.getName();
+					i++;
+				}
+				return true;
+			} else {
+				resultCountry = null;
+				// resultCity = null;
+				return false;
+			}
+
+		}
+
+		public String[] getResultCountry() {
+			return resultCountry;
+		}
+
+		// public String[] getResultCity() {
+		// return resultCity;
+		// }
+
+		protected void onPostExecute(final Boolean success) {
+			if (success) {
+
+				countries = getResultCountry();
+				// cities = getResultCity();
+
+				Intent intent = new Intent(MainActivity.this,
+						RegisterActivity.class);
+				startActivity(intent);
+				finish();
+
+			} else {
+				countries[0] = "Error finding countries!";
+				// cities[0] = "false";
+
+			}
+		}
+
+		protected void onCancelled() {
+			mUserCountrie = null;
+
+		}
 	}
 }

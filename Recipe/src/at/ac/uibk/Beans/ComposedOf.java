@@ -4,10 +4,11 @@ import java.io.Serializable;
 
 /**
  * (OLD besteht_aus)
+ * 
  * @author mirko
- *
+ * 
  */
-public class ComposedOf implements Serializable{
+public class ComposedOf implements Serializable {
 	/**
 	 * 
 	 */
@@ -15,11 +16,12 @@ public class ComposedOf implements Serializable{
 	int recipeID;
 	int ingredientTypeID;
 	String quantity;
-	
-	public ComposedOf(){
-		
+
+	public ComposedOf() {
+
 	}
-	public ComposedOf(int recipeID, int ingredientTypeID, String quantity){
+
+	public ComposedOf(int recipeID, int ingredientTypeID, String quantity) {
 		this.recipeID = recipeID;
 		this.ingredientTypeID = ingredientTypeID;
 		this.quantity = quantity;
@@ -49,15 +51,18 @@ public class ComposedOf implements Serializable{
 		this.quantity = quantity;
 	}
 
-	public String toString(){
+	public String toString() {
 		return this.recipeID + "";
 	}
-	public boolean equals(Object o){
-		ComposedOf c = (ComposedOf)o;
-		if(this.recipeID == c.recipeID && this.ingredientTypeID == c.ingredientTypeID)
+
+	public boolean equals(Object o) {
+		ComposedOf c = (ComposedOf) o;
+		if (this.recipeID == c.recipeID
+				&& this.ingredientTypeID == c.ingredientTypeID)
 			return true;
 		return false;
 	}
+
 	@Override
 	public int hashCode() {
 		int hash = 1;
@@ -66,6 +71,7 @@ public class ComposedOf implements Serializable{
 		hash = hash * 13 + ingredientTypeID;
 		return hash;
 	}
+
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
