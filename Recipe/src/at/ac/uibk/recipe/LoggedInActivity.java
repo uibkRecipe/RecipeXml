@@ -4,15 +4,20 @@ import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
 import android.graphics.PorterDuff.Mode;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.Toast;
 import at.ac.uibk.recipe.adapter.TabsPagerAdapter;
@@ -24,6 +29,8 @@ public class LoggedInActivity extends FragmentActivity implements
 	private TabsPagerAdapter mAdapter = null;
 	private ActionBar actionBar = null;
 
+	public static WindowManager manager = null;
+
 	private String[] tabs = { "AlL", "Co2 neutral", "Vegetarian",
 			"Meat and Fish", "Flour-based" };
 
@@ -31,6 +38,8 @@ public class LoggedInActivity extends FragmentActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_logged_in);
+
+		manager = getWindowManager();
 
 		viewPager = (ViewPager) findViewById(R.id.pager);
 		actionBar = getActionBar();
@@ -124,13 +133,19 @@ public class LoggedInActivity extends FragmentActivity implements
 			return true;
 		}
 		if (id == R.id.action_logout) {
-			Toast.makeText(
-					LoggedInActivity.this,
-					"Goodbye "
-							+ SaveSharedPreference
-									.getUserName(LoggedInActivity.this),
+
+			SharedPreferences sharedPreferences = PreferenceManager
+					.getDefaultSharedPreferences(this);
+			String name = sharedPreferences.getString("username", "ab");
+
+			Editor editor = sharedPreferences.edit();
+
+			Toast.makeText(LoggedInActivity.this, "Goodbye " + name,
 					Toast.LENGTH_LONG).show();
-			SaveSharedPreference.clearUserName(LoggedInActivity.this);
+
+			editor.clear();
+			editor.commit();
+
 			Intent intent = new Intent(LoggedInActivity.this,
 					MainActivity.class);
 			startActivity(intent);
@@ -138,6 +153,15 @@ public class LoggedInActivity extends FragmentActivity implements
 
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			moveTaskToBack(true);
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 
 	@Override

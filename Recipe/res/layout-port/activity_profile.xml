@@ -4,7 +4,6 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/image_background"
     tools:context="at.ac.uibk.recipe.SearchActivity"
     tools:ignore="MergeRootFrame" >
 
@@ -65,8 +64,10 @@
         android:textSize="9pt"
         android:textStyle="bold" />
 
+  
+
     <Button
-        android:id="@+id/statistikButton"
+        android:id="@+id/addRecipe"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
@@ -78,16 +79,17 @@
         android:background="@drawable/buttonselector"
         android:paddingLeft="32dp"
         android:paddingRight="32dp"
-        android:text="@string/statistics"
+        android:text="@string/addRecipe"
         android:textSize="9pt"
-        android:textStyle="bold" />
-
-    <Button
-        android:id="@+id/addRecipe"
+        android:textStyle="bold" >
+    </Button>
+    
+      <Button
+        android:id="@+id/deleteRecipe"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/statistikButton"
+        android:layout_below="@+id/addRecipe"
         android:layout_gravity="right"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
@@ -95,10 +97,9 @@
         android:background="@drawable/buttonselector"
         android:paddingLeft="32dp"
         android:paddingRight="32dp"
-        android:text="@string/addRecipe"
+        android:text="@string/delete"
         android:textSize="9pt"
-        android:textStyle="bold" >
-    </Button>
+        android:textStyle="bold" />
 
     <LinearLayout
         android:id="@+id/toolbar"

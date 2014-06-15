@@ -3,12 +3,17 @@ package at.ac.uibk.recipe.adapter;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 import at.ac.uibk.Beans.Recipe;
+import at.ac.uibk.recipe.LoggedInActivity;
 import at.ac.uibk.recipe.R;
 
 public class FavoritesArrayAdapter extends ArrayAdapter<Recipe> {
@@ -37,8 +42,23 @@ public class FavoritesArrayAdapter extends ArrayAdapter<Recipe> {
 		// TextView valueView = (TextView) rowView
 		// .findViewById(R.id.recipe_description);
 
+		if (items.get(position).getFoto() != null
+				&& items.get(position).getFoto().length > 0) {
+
+			ImageView img = (ImageView) rowView.findViewById(R.id.recipe_image);
+			Bitmap bm = BitmapFactory.decodeByteArray(items.get(position)
+					.getFoto(), 0, items.get(position).getFoto().length);
+			DisplayMetrics dm = new DisplayMetrics();
+
+			LoggedInActivity.manager.getDefaultDisplay().getMetrics(dm);
+
+			img.setMinimumHeight(dm.heightPixels);
+			img.setMinimumWidth(dm.widthPixels);
+			img.setImageBitmap(bm);
+		}
+
 		// 4. Set the text for textView
-		labelView.setText(items.get(position).getTitle());
+		labelView.setText(items.get(position).getName());
 		// valueView.setText(items.get(position).getDescription());
 
 		// 5. retrn rowView

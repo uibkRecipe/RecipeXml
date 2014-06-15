@@ -21,9 +21,10 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
 public class RestApiLib {
-	
+
 	public static String doGet(String url) {
 		String result = null;
+		System.out.println(url);
 		HttpClient httpclient = new DefaultHttpClient();
 		// Prepare a request object
 		HttpGet httpget = new HttpGet(url);
@@ -50,10 +51,11 @@ public class RestApiLib {
 			e.printStackTrace();
 		}
 		// Return the json
+		System.out.println(result);
 		return result;
 	}
 
-	public static String doPost(String url, String string){
+	public static String doPost(String url, String string) {
 		HttpClient httpclient = new DefaultHttpClient();
 		HttpPost request = new HttpPost(url);
 		StringEntity s = null;
@@ -64,10 +66,10 @@ public class RestApiLib {
 			e1.printStackTrace();
 		}
 		String retSrc = null;
-		
+
 		s.setContentEncoding("UTF-8");
 		s.setContentType("application/json");
-	
+
 		request.setEntity(s);
 		request.addHeader("accept", "application/json");
 		request.addHeader("Content-type", "application/json");
@@ -75,6 +77,44 @@ public class RestApiLib {
 		try {
 			HttpResponse response = httpclient.execute(request);
 			HttpEntity entity = response.getEntity();
+			System.out.println(response.getStatusLine());
+			if (entity != null) {
+				retSrc = EntityUtils.toString(entity, "UTF-8");
+			}
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println(retSrc);
+		return retSrc;
+
+	}
+
+	public static String doPut(String url, String c) {
+		HttpClient httpclient = new DefaultHttpClient();
+		HttpPut request = new HttpPut(url);
+		StringEntity s = null;
+		try {
+			s = new StringEntity(c, "UTF-8");
+		} catch (UnsupportedEncodingException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		String retSrc = null;
+
+		s.setContentEncoding("UTF-8");
+		s.setContentType("application/json");
+
+		request.setEntity(s);
+		request.addHeader("accept", "application/json");
+
+		try {
+			HttpResponse response = httpclient.execute(request);
+			HttpEntity entity = response.getEntity();
+			System.out.println(response.getStatusLine());
 			if (entity != null) {
 				retSrc = EntityUtils.toString(entity, "UTF-8");
 			}
@@ -86,32 +126,15 @@ public class RestApiLib {
 			e.printStackTrace();
 		}
 		return retSrc;
-
-
-	
 	}
-	
-	public static HttpResponse doPut(String url, String c) throws ClientProtocolException, IOException
-	{
-	        HttpClient httpclient = new DefaultHttpClient();
-	        HttpPut request = new HttpPut(url);
-	        StringEntity s = new StringEntity(c, "UTF-8");
-	        s.setContentEncoding("UTF-8");
-	        s.setContentType("application/json");
 
-	        request.setEntity(s);
-	        request.addHeader("accept", "application/json");
-
-	        return httpclient.execute(request);
-	}
-	
-	public static String doDelete(String url){
-    	HttpClient httpclient = new DefaultHttpClient();
-    	HttpDelete delete = new HttpDelete(url);
+	public static String doDelete(String url) {
+		HttpClient httpclient = new DefaultHttpClient();
+		HttpDelete delete = new HttpDelete(url);
 		String retSrc = null;
 
-    	delete.addHeader("accept", "application/json");
-    	try {
+		delete.addHeader("accept", "application/json");
+		try {
 			HttpResponse response = httpclient.execute(delete);
 			HttpEntity entity = response.getEntity();
 			if (entity != null) {
@@ -144,23 +167,24 @@ public class RestApiLib {
 		}
 		return strWriter.toString();
 	}
-	
-//	public static String convertStreamToString(InputStream is) throws IOException {
-//		if (is != null) {
-//			StringBuilder sb = new StringBuilder();
-//			String line;
-//			try {
-//				BufferedReader reader = new BufferedReader(
-//						new InputStreamReader(is, "UTF-8"));
-//				while ((line = reader.readLine()) != null) {
-//					sb.append(line).append("\n");
-//				}
-//			} finally {
-//				is.close();
-//			}
-//			return sb.toString();
-//		} else {
-//			return "";
-//		}
-//	}
+
+	// public static String convertStreamToString(InputStream is) throws
+	// IOException {
+	// if (is != null) {
+	// StringBuilder sb = new StringBuilder();
+	// String line;
+	// try {
+	// BufferedReader reader = new BufferedReader(
+	// new InputStreamReader(is, "UTF-8"));
+	// while ((line = reader.readLine()) != null) {
+	// sb.append(line).append("\n");
+	// }
+	// } finally {
+	// is.close();
+	// }
+	// return sb.toString();
+	// } else {
+	// return "";
+	// }
+	// }
 }

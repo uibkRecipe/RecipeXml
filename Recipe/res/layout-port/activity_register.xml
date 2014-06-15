@@ -1,7 +1,6 @@
 <!-- ACTIVITY REGISTER -->
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/image_background"
     tools:context="com.example.test.RegisterActivity" >
 
     <!-- Register progress -->
@@ -11,7 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:background="@drawable/image_background"
         android:gravity="center_horizontal"
         android:orientation="vertical"
         android:paddingTop="?attr/actionBarSize"
@@ -40,7 +38,6 @@
         android:id="@+id/register_form"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/image_background"
         android:isScrollContainer="false"
         android:paddingTop="?attr/actionBarSize" >
 

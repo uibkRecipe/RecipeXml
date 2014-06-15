@@ -4,12 +4,12 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/image_background"
     tools:context="at.ac.uibk.recipe.SearchActivity"
     tools:ignore="MergeRootFrame" >
 
     <ListView
         android:id="@+id/mainListViewFound"
+        android:paddingTop="30dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" >
     </ListView>

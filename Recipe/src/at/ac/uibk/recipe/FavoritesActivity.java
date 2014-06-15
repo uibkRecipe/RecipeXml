@@ -1,51 +1,52 @@
 package at.ac.uibk.recipe;
 
-import android.app.ActionBar;
-import android.app.ActionBar.Tab;
-import android.app.FragmentTransaction;
+import java.util.ArrayList;
+import java.util.List;
+
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
 import android.graphics.PorterDuff.Mode;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.ViewPager;
+import android.preference.PreferenceManager;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.Toast;
-import at.ac.uibk.recipe.adapter.FavoritesTabsPagerAdapter;
+import at.ac.uibk.Beans.Recipe;
+import at.ac.uibk.recipe.adapter.FavoritesArrayAdapter;
+import at.ac.uibk.recipe.api.RestApi;
 
-public class FavoritesActivity extends FragmentActivity implements
-		ActionBar.TabListener, OnClickListener {
+public class FavoritesActivity extends Activity implements OnClickListener {
 
-	private static boolean cooked = false;
-	 
-	private ViewPager viewPager = null;
-	private FavoritesTabsPagerAdapter mAdapter = null;
-	private ActionBar actionBar = null;
+	private FavoritesArrayAdapter adapter = null;
 
-	private String[] tabs = { "AlL", "Co2 neutral", "Vegetarian",
-			"Meat and Fish", "Flour-based" };
+	ListView listView = null;
+
+	private List<Recipe> myList = null;
+	private UserFavorites mUserFavorites = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_favorites);
 
-		viewPager = (ViewPager) findViewById(R.id.pager);
-		actionBar = getActionBar();
-		mAdapter = new FavoritesTabsPagerAdapter(getSupportFragmentManager());
-
-		viewPager.setAdapter(mAdapter);
-		actionBar.setHomeButtonEnabled(false);
-		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
 		findViewById(R.id.home).setOnClickListener(this);
 		findViewById(R.id.searchTab).setOnClickListener(this);
 		findViewById(R.id.favorites).setOnClickListener(this);
 		findViewById(R.id.profile).setOnClickListener(this);
+
+		mUserFavorites = new UserFavorites();
+		mUserFavorites.execute();
 
 		ImageButton home = (ImageButton) findViewById(R.id.home);
 		home.setColorFilter(Color.WHITE);
@@ -61,55 +62,8 @@ public class FavoritesActivity extends FragmentActivity implements
 		ImageButton profile = (ImageButton) findViewById(R.id.profile);
 		profile.setColorFilter(Color.WHITE);
 
-		for (String tab_name : tabs) {
-			actionBar.addTab(actionBar.newTab().setText(tab_name)
-					.setTabListener(this));
-		}
+		listView = (ListView) findViewById(R.id.mainListViewFavorites);
 
-		/**
-		 * on swiping the viewpager make respective tab selected
-		 * */
-		viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-
-			@Override
-			public void onPageSelected(int position) {
-				// on changing the page
-				// make respected tab selected
-
-				actionBar.setSelectedNavigationItem(position);
-			}
-
-			@Override
-			public void onPageScrolled(int arg0, float arg1, int arg2) {
-			}
-
-			@Override
-			public void onPageScrollStateChanged(int arg0) {
-			}
-		});
-
-		if (getIntent().getStringExtra("WHICH_TAB") != null) {
-
-			String tabselected = getIntent().getStringExtra("WHICH_TAB")
-					.toUpperCase();
-
-			if (tabselected.contains("ALL")) {
-				actionBar.setSelectedNavigationItem(0);
-			} else if (tabselected.contains("CO2")) {
-				actionBar.setSelectedNavigationItem(1);
-			} else if (tabselected.contains("FLOUR")) {
-				actionBar.setSelectedNavigationItem(4);
-			} else if (tabselected.contains("MEAT")) {
-				actionBar.setSelectedNavigationItem(3);
-			} else if (tabselected.contains("VEGETARIAN")) {
-				actionBar.setSelectedNavigationItem(2);
-			}
-		}
-		
-		if(!cooked ){
-			Toast.makeText(FavoritesActivity.this, "These are the Recipes which you have already cooked",Toast.LENGTH_LONG).show();
-			cooked = true;
-		}
 	}
 
 	@Override
@@ -130,13 +84,19 @@ public class FavoritesActivity extends FragmentActivity implements
 			return true;
 		}
 		if (id == R.id.action_logout) {
-			Toast.makeText(
-					FavoritesActivity.this,
-					"Goodbye "
-							+ SaveSharedPreference
-									.getUserName(FavoritesActivity.this),
+
+			SharedPreferences sharedPreferences = PreferenceManager
+					.getDefaultSharedPreferences(this);
+			String name = sharedPreferences.getString("username", "ab");
+
+			Editor editor = sharedPreferences.edit();
+
+			Toast.makeText(FavoritesActivity.this, "Goodbye " + name,
 					Toast.LENGTH_LONG).show();
-			SaveSharedPreference.clearUserName(FavoritesActivity.this);
+
+			editor.clear();
+			editor.commit();
+
 			Intent intent = new Intent(FavoritesActivity.this,
 					MainActivity.class);
 			startActivity(intent);
@@ -147,22 +107,12 @@ public class FavoritesActivity extends FragmentActivity implements
 	}
 
 	@Override
-	public void onTabSelected(Tab tab, FragmentTransaction ft) {
-		// TODO Auto-generated method stub
-		viewPager.setCurrentItem(tab.getPosition());
-		// Log.e("ABCD", tab.getText()+" asd");
-	}
-
-	@Override
-	public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-		// on tab selected
-		// show respected fragment view
-	}
-
-	@Override
-	public void onTabReselected(Tab tab, FragmentTransaction ft) {
-		// TODO Auto-generated method stub
-
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			moveTaskToBack(true);
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 
 	@Override
@@ -170,8 +120,6 @@ public class FavoritesActivity extends FragmentActivity implements
 		if (v.getId() == R.id.home) {
 			Intent intent = new Intent(FavoritesActivity.this,
 					LoggedInActivity.class);
-			intent.putExtra("WHICH_TAB", actionBar.getSelectedTab().getText()
-					.toString());
 			startActivity(intent);
 			overridePendingTransition(0, 0);
 
@@ -179,8 +127,6 @@ public class FavoritesActivity extends FragmentActivity implements
 
 			Intent intent = new Intent(FavoritesActivity.this,
 					SearchLoggedInActivity.class);
-			intent.putExtra("WHICH_TAB", actionBar.getSelectedTab().getText()
-					.toString());
 			startActivity(intent);
 			overridePendingTransition(0, 0);
 
@@ -213,4 +159,64 @@ public class FavoritesActivity extends FragmentActivity implements
 
 	}
 
+	private class UserFavorites extends AsyncTask<Void, Void, Boolean> {
+
+		private List<Recipe> result = null;
+
+		@Override
+		protected Boolean doInBackground(Void... urls) {
+			SharedPreferences sharedPreferences = PreferenceManager
+					.getDefaultSharedPreferences(FavoritesActivity.this);
+			String username = sharedPreferences.getString("username", "ab");
+			if (username == "ab")
+				return false;
+			myList = RestApi.getInstance().findFavoriteRecipe(username);
+			if (myList == null)
+				return false;
+			result = myList;
+			return true;
+		}
+
+		public List<Recipe> getResult() {
+			return result;
+		}
+
+		protected void onPostExecute(final Boolean success) {
+
+			if (success) {
+
+				if (getResult().size() != 0 && getResult() != null) {
+
+					adapter = new FavoritesArrayAdapter(FavoritesActivity.this,
+							(ArrayList<Recipe>) getResult());
+
+					// 3. setListAdapter
+					listView.setAdapter(adapter);
+
+					listView.setOnItemClickListener(new OnItemClickListener() {
+
+						@Override
+						public void onItemClick(AdapterView<?> parent,
+								View view, int position, long id) {
+
+							Intent intent = new Intent(FavoritesActivity.this,
+									ShowRecipeActivity.class);
+							Recipe recipe = adapter.getItem(position);
+							intent.putExtra("SELECTED_RECIPE", recipe);
+							intent.putExtra("WHICH_BEFORE", "All");
+							startActivity(intent);
+						}
+					});
+
+				} else {
+					Toast.makeText(FavoritesActivity.this,
+							"No Favorite Recipes found", Toast.LENGTH_LONG)
+							.show();
+				}
+			} else {
+
+			}
+
+		}
+	}
 }

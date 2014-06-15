@@ -5,6 +5,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="action_logout">Logout</string>
+    <string name="action_Add">Add</string>
     <string name="action_search">Search</string>
     <string name="action_login">Login</string>
     <string name="action_register">Register</string>
@@ -15,6 +16,7 @@
     <string name="title_activity_register">RegisterActivity</string>
     <string name="title_activity_search">SearchActivity</string>
     <string name="registerString">Please fill in all fields. All fields are required. Foto is not required, but if you want to upload a Foto please dont use more than a 2MP camera. </string>
+    <string name="addString">Here you can add a recipe</string>
     <string name="search_hint">Search</string>
     <string name="title_activity_search_result">Search</string>
     <string name="title_activity_logged_in">Recipe</string>
@@ -26,6 +28,10 @@
     <string name="description"></string>
     <string name="title_activity_show_recipe">ShowRecipe</string>
     <string name="title_recipe">Title:</string>
+    <string name="time_recipe">Time:</string>
+    <string name="rating_recipe">AVG Rating:</string>
+    <string name="co2_recipe">Ingreedients distance:</string>
+    <string name="cookedtimes_recipe">Cooked:</string>
     <string name="title_preparation">Preparation:</string>
     <string name="title_ingredient">Ingredients:</string>
     <string name="test">test</string>
@@ -37,14 +43,15 @@
     <string name="searchStringFlour">You can search here for Flour-based Recipes. Please fill in the required Fields.</string>
     <string name="searchTitle">Title</string>
     <string name="searchTime">Time</string>
-    <string name="searchTimeString">10 min</string>
+    <string name="searchTimeString">100 min</string>
     <string name="title_activity_search_found">SearchFound</string>
     <string name="title_activity_favorites">FavoritesActivity</string>
     <string name="title_activity_profile">ProfileActivity</string>
     <string name="cooked">Cooked</string>
+    <string name="favorite">Add as Favorite</string>
     <string name="rate">Submit Rating</string>
     <string name="friends">Friends</string>
-    <string name="statistics">Statistics</string>
+    <string name="delete">Delete Recipe</string>
     <string name="addRecipe">Add Recipe</string>
     <string name="country_prompt">Choose a country</string>
     <string name="ingredient">Ingredient</string>
@@ -62,8 +69,7 @@
         <item>New Zealand</item>
         <item>India</item>
     </string-array>
-    
-     <string-array name="country_array">
+    <string-array name="country_array">
         <item>Malaysia</item>
         <item>United States</item>
         <item>Indonesia</item>
@@ -73,8 +79,7 @@
         <item>New Zealand</item>
         <item>India</item>
     </string-array>
-    
-      <string-array name="city_array">
+    <string-array name="city_array">
         <item>Malaysia</item>
         <item>United States</item>
         <item>Indonesia</item>
@@ -84,5 +89,23 @@
         <item>New Zealand</item>
         <item>India</item>
     </string-array>
+    <string-array name="categories">
+        <item>All Categories</item>
+        <item>Vegetarian</item>
+        <item>Meat and Fish</item>
+        <item>Flour Based</item>
+    </string-array>
+    <string-array name="categoriesWithout">
+        <item>Vegetarian</item>
+        <item>Meat and Fish</item>
+        <item>Flour Based</item>
+    </string-array>
+
+    <string name="title_activity_delete_recipe">DeleteRecipeActivity</string>
+    <string name="title_activity_friend">FriendActivity</string>
+    <string name="title_activity_add_recipe">AddRecipe</string>
+    <string name="title_activity_show_friends_recipes">ShowFriendsRecipesActivity</string>
+    <string name="title_activity_show_recipe_activity_not">ShowRecipeActivityNot</string>
+    <string name="title_activity_show_recipe_not">ShowRecipeNotActivity</string>
 
 </resources>

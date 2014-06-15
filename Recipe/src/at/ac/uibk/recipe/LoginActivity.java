@@ -5,10 +5,14 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -209,14 +213,18 @@ public class LoginActivity extends Activity {
 			} catch (InterruptedException e) {
 				return null;
 			}
-			User o = RestApi.getInstance().login(username, password);
-
-			if (o != null) {
-				result = o;
-				return true;
-			} else {
+			User o = null;
+			try {
+				o = RestApi.getInstance().login(username, password);
+			} catch (Exception e) {
+				return false;
+			}
+			if (o == null) {
 				result = null;
 				return false;
+			} else {
+				result = o;
+				return true;
 			}
 
 		}
@@ -230,24 +238,37 @@ public class LoginActivity extends Activity {
 
 			showProgress(false);
 
-			if (success) {
+			if (username != null) {
+				if (success) {
 
-				Intent intent = new Intent(LoginActivity.this,
-						LoggedInActivity.class);
-				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
-						| Intent.FLAG_ACTIVITY_NEW_TASK);
-				startActivity(intent);
+					SharedPreferences sharedPreferences = PreferenceManager
+							.getDefaultSharedPreferences(LoginActivity.this);
+					Editor editor = sharedPreferences.edit();
+					editor.putString("username", username);
+					if (getResult().getFoto() != null) {
+						String saveThis = Base64.encodeToString(getResult()
+								.getFoto(), Base64.DEFAULT);
 
-				loggedInUser = getResult();
+						editor.putString("foto", saveThis);
+					}
+					editor.commit();
+					loggedInUser = getResult();
 
-				finish();
+					Intent intent = new Intent(LoginActivity.this,
+							LoggedInActivity.class);
+					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
+							| Intent.FLAG_ACTIVITY_NEW_TASK);
+					startActivity(intent);
 
-			} else {
-				mPasswordView
-						.setError(getString(R.string.error_incorrect_password));
-				mUsernameView
-						.setError(getString(R.string.error_incorrect_password));
-				mUsernameView.requestFocus();
+					finish();
+
+				} else {
+					mPasswordView
+							.setError(getString(R.string.error_incorrect_password));
+					mUsernameView
+							.setError(getString(R.string.error_incorrect_password));
+					mUsernameView.requestFocus();
+				}
 			}
 
 		}

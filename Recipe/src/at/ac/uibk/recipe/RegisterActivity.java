@@ -46,16 +46,14 @@ import at.ac.uibk.Beans.Country;
 import at.ac.uibk.Beans.Region;
 import at.ac.uibk.recipe.api.RestApi;
 
-
-
 /**
- * Only JPEG fotos can be uploaded now. 
- * See if you can read the type out of bitmap to change form jpeg to png
+ * Only JPEG fotos can be uploaded now. See if you can read the type out of
+ * bitmap to change form jpeg to png
  * 
  * 
  * 
  * @author Hannes
- *
+ * 
  */
 public class RegisterActivity extends Activity {
 
@@ -363,7 +361,6 @@ public class RegisterActivity extends Activity {
 				i++;
 			}
 
-			System.out.println(i);
 			cityCit = cityList.get(i);
 
 			mRegisterStatusMessageView
@@ -409,23 +406,6 @@ public class RegisterActivity extends Activity {
 			mRegisterStatusView.setVisibility(show ? View.VISIBLE : View.GONE);
 			mRegisterFormView.setVisibility(show ? View.GONE : View.VISIBLE);
 		}
-	}
-
-	public static HttpResponse doPost(String url, String string)
-			throws ClientProtocolException, IOException {
-
-		HttpClient httpclient = new DefaultHttpClient();
-		HttpPost request = new HttpPost(url);
-		StringEntity s = new StringEntity(string);
-
-		s.setContentEncoding("UTF-8");
-		s.setContentType("application/json");
-
-		request.setEntity(s);
-		request.addHeader("accept", "application/json");
-		request.addHeader("Content-type", "application/json");
-
-		return httpclient.execute(request);
 	}
 
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -540,10 +520,6 @@ public class RegisterActivity extends Activity {
 			Boolean o = false;
 
 			if (foto == null) {
-
-				// in countryCount is country name witht type Country
-
-				System.out.println(lastname);
 				o = RestApi.getInstance().addUser(username, password, email,
 						firstname, lastname, cityCit);
 			} else {
@@ -561,6 +537,9 @@ public class RegisterActivity extends Activity {
 			mAuthTask = null;
 			showProgress(false);
 			if (success) {
+				Intent intent = new Intent(RegisterActivity.this,
+						MainActivity.class);
+				startActivity(intent);
 				finish();
 
 			} else {
@@ -676,7 +655,6 @@ public class RegisterActivity extends Activity {
 					resultCities[i] = c.getName();
 					i++;
 				}
-				Log.e("ABCD", resultCities[10] + " ");
 				return true;
 			} else {
 				resultCities = null;
@@ -699,7 +677,6 @@ public class RegisterActivity extends Activity {
 			if (success) {
 
 				cities = getResultCities();
-				Log.e("ABCD", cities[10] + " ");
 
 				// Get a reference to the AutoCompleteTextView in the layout
 				autoComplete1 = (AutoCompleteTextView) findViewById(R.id.autocomplete_city);

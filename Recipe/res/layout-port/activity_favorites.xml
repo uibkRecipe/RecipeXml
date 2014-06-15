@@ -4,15 +4,15 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/image_background"
     tools:context="at.ac.uibk.recipe.SearchActivity"
     tools:ignore="MergeRootFrame" >
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/pager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-    </android.support.v4.view.ViewPager>
+    <ListView
+        android:id="@+id/mainListViewFavorites"
+        android:paddingTop="35dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+    </ListView>
 
     <LinearLayout
         android:id="@+id/toolbar"

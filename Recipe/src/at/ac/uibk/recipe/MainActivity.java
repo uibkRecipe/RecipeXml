@@ -1,17 +1,19 @@
 package at.ac.uibk.recipe;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,8 +21,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
-import at.ac.uibk.Beans.City;
 import at.ac.uibk.Beans.Country;
+import at.ac.uibk.Beans.Recipe;
 import at.ac.uibk.recipe.api.RestApi;
 
 public class MainActivity extends ActionBarActivity {
@@ -29,7 +31,8 @@ public class MainActivity extends ActionBarActivity {
 	static String[] cities = null;
 
 	static List<Country> o = null;
-	
+
+	UserSearch userSearch = null;
 	UserCountries mUserCountrie = null;
 
 	@Override
@@ -37,7 +40,11 @@ public class MainActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		if (SaveSharedPreference.getUserName(MainActivity.this).length() == 0) {
+		SharedPreferences sharedPreferences = PreferenceManager
+				.getDefaultSharedPreferences(this);
+		String name = sharedPreferences.getString("username", "ab");
+
+		if (name.equals("ab")) {
 			final Button loginButton = (Button) findViewById(R.id.login);
 			loginButton.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
@@ -61,9 +68,9 @@ public class MainActivity extends ActionBarActivity {
 			final Button searchButton = (Button) findViewById(R.id.search);
 			searchButton.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
-					Intent intent = new Intent(MainActivity.this,
-							SearchActivity.class);
-					startActivity(intent);
+
+					userSearch = new UserSearch();
+					userSearch.execute();
 
 				}
 			});
@@ -123,13 +130,6 @@ public class MainActivity extends ActionBarActivity {
 			}
 		}
 
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_main, container,
-					false);
-			return rootView;
-		}
 	}
 
 	/**
@@ -183,7 +183,7 @@ public class MainActivity extends ActionBarActivity {
 
 			resultCountry = new String[o.size()];
 			countries = new String[resultCountry.length];
-			
+
 			if (o != null) {
 				int i = 0;
 				for (Country c : o) {
@@ -202,10 +202,6 @@ public class MainActivity extends ActionBarActivity {
 		public String[] getResultCountry() {
 			return resultCountry;
 		}
-
-		// public String[] getResultCity() {
-		// return resultCity;
-		// }
 
 		protected void onPostExecute(final Boolean success) {
 			if (success) {
@@ -227,6 +223,56 @@ public class MainActivity extends ActionBarActivity {
 
 		protected void onCancelled() {
 			mUserCountrie = null;
+
+		}
+	}
+
+	public class UserSearch extends AsyncTask<Void, Void, Boolean> {
+		private List<Recipe> result = null;
+
+		@Override
+		protected Boolean doInBackground(Void... urls) {
+			List<Recipe> o = RestApi.getInstance().getAllRecipes();
+			if (o != null) {
+				result = o;
+				return true;
+			}
+			return false;
+		}
+
+		protected void onPostExecute(final Boolean success) {
+			if (success) {
+				if (result.size() > 0) {
+					if (result.size() > 10) {
+						List<Recipe> smallres = new ArrayList<Recipe>();
+						for (int i = 0; i <= 10; i++) {
+							smallres.add(result.get(i));
+
+						}
+						Intent intent = new Intent(MainActivity.this,
+								SearchActivity.class);
+
+						intent.putExtra("LIST_RECIPE",
+								(ArrayList<Recipe>) smallres);
+						startActivity(intent);
+
+					} else {
+						Intent intent = new Intent(MainActivity.this,
+								SearchActivity.class);
+
+						intent.putExtra("LIST_RECIPE",
+								(ArrayList<Recipe>) result);
+						startActivity(intent);
+					}
+				}
+
+			} else {
+				Toast.makeText(MainActivity.this, "Error connecting to DB",
+						Toast.LENGTH_SHORT).show();
+			}
+		}
+
+		protected void onCancelled() {
 
 		}
 	}

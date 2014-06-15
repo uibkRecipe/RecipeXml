@@ -56,8 +56,9 @@ public class User {
 	 * @param password Password of the new user
 	 * @param email
 	 */
-	public User(String uname, String password, String email,String firstname, String lastname,  City c){
-		this(uname,password, email, firstname, lastname, c.getID(), c.getCountry());
+	public User(String uname, String password, String email,
+			String firstname, String lastname, City c){
+		this(uname,password, email,firstname, lastname, c.getID(), c.getCountry());
 		
 	}
 	
@@ -80,9 +81,6 @@ public class User {
 		this.isActive = 1;
 	}
 
-	
-	
-	
 	/**
 	 * Constructor to create a new user, with asking for surname and name
 	 * @param uname	Username of the new user

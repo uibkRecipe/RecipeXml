@@ -6,7 +6,11 @@
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_username">Username</string>
+    <string name="title">Title</string>
     <string name="prompt_password">Password</string>
+    <string name="subtitle">Subtitle (Short description)</string>
+    <string name="preparation">Preparation</string>
+    <string name="quantity">Quantity</string>
     <string name="prompt_repeat_password">Repeat Password</string>
     <string name="action_sign_in_register"><b>Login</b></string>
     <string name="action_sign_in_short">Login</string>
@@ -27,6 +31,7 @@
     <string name="action_register_sign_in"><b>Register</b></string>
     <string name="action_register_short">Register</string>
     <string name="register_progress_signing_in">Register&#8230;</string>
+    <string name="add_progress_signing_in">Adding&#8230;</string>
     <string name="error_password_not_same">The passwords are not the same</string>
 
 </resources>
