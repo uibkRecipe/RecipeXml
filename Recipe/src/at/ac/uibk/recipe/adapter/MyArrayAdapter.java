@@ -54,9 +54,9 @@ public class MyArrayAdapter extends ArrayAdapter<Recipe> {
 			ImageView img = (ImageView) rowView.findViewById(R.id.recipe_image);
 			Bitmap bm = BitmapFactory.decodeByteArray(items.get(position)
 					.getFoto(), 0, items.get(position).getFoto().length);
-			DisplayMetrics dm = new DisplayMetrics();
+			DisplayMetrics dm = context.getResources().getDisplayMetrics();
 
-			LoggedInActivity.manager.getDefaultDisplay().getMetrics(dm);
+			
 
 			img.setMinimumHeight(dm.heightPixels);
 			img.setMinimumWidth(dm.widthPixels);

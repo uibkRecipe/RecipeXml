@@ -38,6 +38,15 @@ public class LoggedInActivity extends FragmentActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_logged_in);
+		
+		SharedPreferences sharedPreferences = PreferenceManager
+				.getDefaultSharedPreferences(this);
+		String name = sharedPreferences.getString("username", "ab");
+		if(name.equals("ab")){
+			Intent intent = new Intent(LoggedInActivity.this, MainActivity.class);
+			startActivity(intent);
+			finish();
+		}
 
 		manager = getWindowManager();
 

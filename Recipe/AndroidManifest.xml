@@ -38,7 +38,7 @@
             android:windowSoftInputMode="stateVisible" >
         </activity>
         <activity
-            android:name="at.ac.uibk.recipe.SearchActivity"
+            android:name="at.ac.uibk.recipe.SearchActivityNotLoggedIn"
             android:parentActivityName="at.ac.uibk.recipe.MainActivity"
             android:screenOrientation="portrait" >
         </activity>

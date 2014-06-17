@@ -35,6 +35,15 @@ public class ProfileActivity extends FragmentActivity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_profile);
 
+		SharedPreferences sharedPreferences = PreferenceManager
+				.getDefaultSharedPreferences(this);
+		String name = sharedPreferences.getString("username", "ab");
+		if (name.equals("ab")) {
+			Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
+			startActivity(intent);
+			finish();
+		}
+
 		findViewById(R.id.home).setOnClickListener(this);
 		findViewById(R.id.searchTab).setOnClickListener(this);
 		findViewById(R.id.favorites).setOnClickListener(this);
@@ -55,9 +64,8 @@ public class ProfileActivity extends FragmentActivity implements
 		profile.setImageResource(R.drawable.ic_action_person_selected);
 
 		TextView username = (TextView) findViewById(R.id.username);
-		SharedPreferences sharedPreferences = PreferenceManager
-				.getDefaultSharedPreferences(this);
-		String name = sharedPreferences.getString("username", "ab");
+		sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+		name = sharedPreferences.getString("username", "ab");
 
 		username.setText(name);
 

@@ -236,7 +236,16 @@ public class FriendActivity extends Activity implements OnClickListener {
 				if (result.size() > 0) {
 					Intent intent = new Intent(FriendActivity.this,
 							SearchFoundActivity.class);
-					intent.putExtra("LIST_RECIPE", (ArrayList<Recipe>) result);
+					List<Recipe> rat = new ArrayList<Recipe>();
+					int i  = 0;
+					for(Recipe r: result){
+						rat.add(r);
+						i++;
+						if(i == 5)
+							break;
+
+					}
+					intent.putExtra("LIST_RECIPE", (ArrayList<Recipe>) rat);
 					intent.putExtra("FRIENDS", "FRIENDS");
 					startActivity(intent);
 				} else {

@@ -15,7 +15,7 @@ import android.widget.TextView;
 import at.ac.uibk.Beans.Recipe;
 import at.ac.uibk.recipe.LoggedInActivity;
 import at.ac.uibk.recipe.R;
-import at.ac.uibk.recipe.SearchActivity;
+import at.ac.uibk.recipe.SearchActivityNotLoggedIn;
 
 public class MyArrayAdapterNot extends ArrayAdapter<Recipe> {
 
@@ -55,9 +55,7 @@ public class MyArrayAdapterNot extends ArrayAdapter<Recipe> {
 			ImageView img = (ImageView) rowView.findViewById(R.id.recipe_image);
 			Bitmap bm = BitmapFactory.decodeByteArray(items.get(position)
 					.getFoto(), 0, items.get(position).getFoto().length);
-			DisplayMetrics dm = new DisplayMetrics();
-
-			SearchActivity.manager.getDefaultDisplay().getMetrics(dm);
+			DisplayMetrics dm = context.getResources().getDisplayMetrics();
 
 			img.setMinimumHeight(dm.heightPixels);
 			img.setMinimumWidth(dm.widthPixels);

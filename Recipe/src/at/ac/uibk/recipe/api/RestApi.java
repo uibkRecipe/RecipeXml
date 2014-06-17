@@ -27,7 +27,7 @@ import at.ac.uibk.Beans.User;
 
 public class RestApi {
 
-	private static final String URLBASE = "http://138.232.65.234:8080/RestServer/rest/manager/";
+	private static final String URLBASE = "http://138.232.65.234:8080/RestServer2/rest/manager/";
 
 	private static RestApi instance;
 

@@ -14,11 +14,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 import at.ac.uibk.Beans.Country;
@@ -65,10 +64,9 @@ public class MainActivity extends ActionBarActivity {
 				}
 			});
 
-			final Button searchButton = (Button) findViewById(R.id.search);
+			final Button searchButton = (Button) findViewById(R.id.searchNot);
 			searchButton.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
-
 					userSearch = new UserSearch();
 					userSearch.execute();
 
@@ -112,25 +110,7 @@ public class MainActivity extends ActionBarActivity {
 		}
 	}
 
-	/**
-	 * A placeholder fragment containing a simple view.
-	 */
-	public static class PlaceholderFragment extends Fragment {
-
-		public PlaceholderFragment() {
-		}
-
-		@Override
-		public void setUserVisibleHint(boolean isVisibleToUser) {
-			super.setUserVisibleHint(isVisibleToUser);
-			if (isVisibleToUser) {
-				Activity a = getActivity();
-				if (a != null)
-					a.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
-			}
-		}
-
-	}
+	
 
 	/**
 	 * to stop all resources that CPU is not used
@@ -242,28 +222,21 @@ public class MainActivity extends ActionBarActivity {
 
 		protected void onPostExecute(final Boolean success) {
 			if (success) {
+
 				if (result.size() > 0) {
-					if (result.size() > 10) {
-						List<Recipe> smallres = new ArrayList<Recipe>();
-						for (int i = 0; i <= 10; i++) {
-							smallres.add(result.get(i));
+					List<Recipe> rat = new ArrayList<Recipe>();
+					int i  = 0;
+					for(Recipe r: result){
+						rat.add(r);
+						i++;
+						if(i == 5)
+							break;
 
-						}
-						Intent intent = new Intent(MainActivity.this,
-								SearchActivity.class);
-
-						intent.putExtra("LIST_RECIPE",
-								(ArrayList<Recipe>) smallres);
-						startActivity(intent);
-
-					} else {
-						Intent intent = new Intent(MainActivity.this,
-								SearchActivity.class);
-
-						intent.putExtra("LIST_RECIPE",
-								(ArrayList<Recipe>) result);
-						startActivity(intent);
 					}
+					Intent intent = new Intent(MainActivity.this,
+							SearchActivityNotLoggedIn.class);
+					intent.putExtra("LIST_RECIPE", (ArrayList<Recipe>) rat);
+					startActivity(intent);
 				}
 
 			} else {

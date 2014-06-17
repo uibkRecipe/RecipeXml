@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.List;
 
 import android.animation.Animator;
@@ -31,14 +32,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -46,7 +45,6 @@ import android.widget.Toast;
 import at.ac.uibk.Beans.IngredientType;
 import at.ac.uibk.Beans.Recipe;
 import at.ac.uibk.Beans.RecipeIngredients;
-import at.ac.uibk.recipe.SearchLoggedInActivity.UserIngredients;
 import at.ac.uibk.recipe.api.RestApi;
 
 public class AddRecipe extends Activity implements OnClickListener {
@@ -60,12 +58,9 @@ public class AddRecipe extends Activity implements OnClickListener {
 	private TextView textview = null;
 	private EditText nameAdd = null;
 
-	private List<IngredientType> ingredientsList = null;
-
-	private UserIngredients mUserIngredients = null;
-
 	private byte[] foto = null;
 
+	private String[] resIngredients = null;
 	private EditText titleEdit = null;
 	private EditText subtitleEdit = null;
 	private EditText preparationEdit = null;
@@ -83,30 +78,33 @@ public class AddRecipe extends Activity implements OnClickListener {
 	private TextView mAddStatusMessageView = null;
 
 	private AddRecipeTask mAuthTask = null;
-//	private AutoCompleteTextView autoComplete, autoComplete1, autoComplete2,
-//			autoComplete3, autoComplete4, autoComplete5 = null;
-//	private EditText quantity, quantity1, quantity2, quantity3, quantity4,
-//			quantity5 = null;
+
+	private AutoCompleteTextView auto = null;
+	private EditText quantity = null;
+	private List<IngredientType> ingredientsList = null;
+
+	private Button add_ingredient = null;
+	private AddIngredient mAddIngredient = null;
+	private UserIngredients mUserIngredients = null;
+
+	private String autoString = null;
+	private String quantityString = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_add_recipe);
 
-//		mUserIngredients = new UserIngredients();
-//		mUserIngredients.execute();
+		mUserIngredients = new UserIngredients();
+		mUserIngredients.execute();
 
 		nameAdd = (EditText) findViewById(R.id.nameAdd);
 		ColorStateList colors = nameAdd.getHintTextColors();
 		tv = (TextView) findViewById(R.id.add_time_text);
 		tv.setTextColor(colors);
 
-//		quantity = (EditText) findViewById(R.id.quantity);
-//		quantity1 = (EditText) findViewById(R.id.quantity1);
-//		quantity2 = (EditText) findViewById(R.id.quantity2);
-//		quantity3 = (EditText) findViewById(R.id.quantity3);
-//		quantity4 = (EditText) findViewById(R.id.quantity4);
-//		quantity5 = (EditText) findViewById(R.id.quantity5);
+		quantity = (EditText) findViewById(R.id.quantity_add);
+		auto = (AutoCompleteTextView) findViewById(R.id.autocomplete_ingredients_add);
 
 		spinner = (Spinner) findViewById(R.id.spinner);
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
@@ -150,6 +148,31 @@ public class AddRecipe extends Activity implements OnClickListener {
 								Intent.createChooser(intent, "Select Picture"),
 								SELECT_PICTURE);
 
+					}
+				});
+
+		findViewById(R.id.Add_ingredient).setVisibility(View.GONE);
+		findViewById(R.id.Add_finish).setVisibility(View.GONE);
+		
+		findViewById(R.id.Add_finish).setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(AddRecipe.this, ProfileActivity.class);
+				startActivity(intent);
+				finish();
+			}
+		});
+
+		auto.setVisibility(View.GONE);
+		quantity.setVisibility(View.GONE);
+
+		((Button) findViewById(R.id.Add_ingredient))
+				.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						attempAddIng();
 					}
 				});
 
@@ -294,9 +317,44 @@ public class AddRecipe extends Activity implements OnClickListener {
 			showProgress(true);
 			mAuthTask = new AddRecipeTask();
 			mAuthTask.execute();
+		}
+	}
 
+	public void attempAddIng() {
+
+		auto.setError(null);
+		quantity.setError(null);
+
+		autoString = auto.getText().toString();
+		quantityString = quantity.getText().toString();
+		boolean cancel = false;
+		View focusView = null;
+		if (TextUtils.isEmpty(autoString)) {
+			auto.setText("No ingredient Selected");
+			focusView = auto;
+			cancel = true;
 		}
 
+		// for (IngredientType i : ingredientsList) {
+		// cancel = true;
+		// auto.setText("No ingredient Selected a");
+		// if (i.getName().equals(autoString)) {
+		// cancel = false;
+		// break;
+		// }
+		// }
+		if (TextUtils.isEmpty(quantityString)) {
+			quantity.setText("Empty quantity");
+			focusView = quantity;
+			cancel = true;
+		}
+		if (cancel) {
+			focusView.requestFocus();
+
+		} else {
+			mAddIngredient = new AddIngredient();
+			mAddIngredient.execute();
+		}
 	}
 
 	/**
@@ -451,27 +509,6 @@ public class AddRecipe extends Activity implements OnClickListener {
 
 			return RestApi.getInstance().addRecipe(r);
 
-//			List<Recipe> l = RestApi.getInstance().findRecipeByCategory(cat);
-//			Recipe a = null;
-//			for (Recipe ra : l) {
-//				if (ra.getAutor().equals(name) && ra.getName().equals(time)) {
-//					a = ra;
-//				}
-//			}
-//			RecipeIngredients rI = null;
-//			if (autoComplete.getText().toString() != null
-//					&& quantity.getText().toString() != null) {
-//				rI = new RecipeIngredients();
-//				IngredientType i = new IngredientType(autoComplete.getText()
-//						.toString());
-//				rI.addIngredient(quantity.getText().toString(), i);
-//			}
-//			boolean temp2 = false;
-//			if (rI != null)
-//				temp2 = RestApi.getInstance().addIngredientToRecipe(a.getID(),
-//						rI);
-//
-//			return true;
 		}
 
 		protected void onPostExecute(final Boolean success) {
@@ -480,9 +517,22 @@ public class AddRecipe extends Activity implements OnClickListener {
 				Toast.makeText(AddRecipe.this,
 						"You successfully added a Recipe", Toast.LENGTH_SHORT)
 						.show();
-				Intent intent = new Intent(AddRecipe.this,
-						ProfileActivity.class);
-				startActivity(intent);
+				findViewById(R.id.Add_ingredient).setVisibility(View.VISIBLE);
+
+				auto.setVisibility(View.VISIBLE);
+				quantity.setVisibility(View.VISIBLE);
+				findViewById(R.id.Add_finish).setVisibility(View.VISIBLE);
+
+
+				titleEdit.setVisibility(View.GONE);
+				subtitleEdit.setVisibility(View.GONE);
+				seekbar.setVisibility(View.GONE);
+				findViewById(R.id.add_time_text).setVisibility(View.GONE);
+				preparationEdit.setVisibility(View.GONE);
+				spinner.setVisibility(View.GONE);
+				findViewById(R.id.select_image).setVisibility(View.GONE);
+				findViewById(R.id.selected_image).setVisibility(View.GONE);
+				findViewById(R.id.Add_button).setVisibility(View.GONE);
 
 			} else {
 				Toast.makeText(AddRecipe.this, "Error Adding Recipe",
@@ -496,64 +546,123 @@ public class AddRecipe extends Activity implements OnClickListener {
 		}
 	}
 
-//	public class UserIngredients extends AsyncTask<Void, Void, Boolean> {
-//
-//		private String[] result = null;
-//
-//		@Override
-//		protected Boolean doInBackground(Void... urls) {
-//			ingredientsList = RestApi.getInstance().getAllIngredientType();
-//
-//			if (ingredientsList != null) {
-//				result = new String[ingredientsList.size()];
-//				int i = 0;
-//				for (IngredientType c : ingredientsList) {
-//					result[i] = c.getName();
-//					i++;
-//				}
-//				return true;
-//			} else {
-//				result = null;
-//				return false;
-//			}
-//		}
-//
-//		public String[] getResult() {
-//			return result;
-//		}
-//
-//		protected void onPostExecute(final Boolean success) {
-//			mUserIngredients = null;
-//
-//			if (success) {
-//
-//				// Get a reference to the AutoCompleteTextView in the layout
-//				autoComplete = (AutoCompleteTextView) findViewById(R.id.autocomplete_ingredients);
-//
-//				// Create the adapter and set it to the AutoCompleteTextView
-//				ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-//						AddRecipe.this, android.R.layout.simple_list_item_1,
-//						getResult());
-//				autoComplete.setAdapter(adapter);
-//
-//				autoComplete1 = (AutoCompleteTextView) findViewById(R.id.autocomplete_ingredients1);
-//				autoComplete1.setAdapter(adapter);
-//				autoComplete2 = (AutoCompleteTextView) findViewById(R.id.autocomplete_ingredients2);
-//				autoComplete2.setAdapter(adapter);
-//				autoComplete3 = (AutoCompleteTextView) findViewById(R.id.autocomplete_ingredients3);
-//				autoComplete3.setAdapter(adapter);
-//				autoComplete4 = (AutoCompleteTextView) findViewById(R.id.autocomplete_ingredients4);
-//				autoComplete4.setAdapter(adapter);
-//				autoComplete5 = (AutoCompleteTextView) findViewById(R.id.autocomplete_ingredients5);
-//				autoComplete5.setAdapter(adapter);
-//
-//			} else {
-//
-//			}
-//		}
-//
-//		protected void onCancelled() {
-//			mUserIngredients = null;
-//		}
-//	}
+	public class UserIngredients extends AsyncTask<Void, Void, Boolean> {
+		private String[] result = null;
+
+		@Override
+		protected Boolean doInBackground(Void... urls) {
+			ingredientsList = RestApi.getInstance().getAllIngredientType();
+
+			if (ingredientsList != null) {
+				result = new String[ingredientsList.size()];
+				int i = 0;
+				for (IngredientType c : ingredientsList) {
+					result[i] = c.getName();
+					i++;
+				}
+				return true;
+			} else {
+				result = null;
+				return false;
+			}
+
+		}
+
+		public String[] getResult() {
+			return result;
+		}
+
+		protected void onPostExecute(final Boolean success) {
+			mUserIngredients = null;
+
+			if (success) {
+
+				// Create the adapter and set it to the AutoCompleteTextView
+				ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+						AddRecipe.this, android.R.layout.simple_list_item_1,
+						result);
+				auto.setAdapter(adapter);
+				resIngredients = result;
+			} else {
+				Toast.makeText(AddRecipe.this,
+						"Sorry error appeared. Please try again later",
+						Toast.LENGTH_LONG).show();
+			}
+
+		}
+
+		protected void onCancelled() {
+			mUserIngredients = null;
+
+		}
+	}
+
+	public class AddIngredient extends AsyncTask<Void, Void, Boolean> {
+
+		@Override
+		protected Boolean doInBackground(Void... urls) {
+			List<Recipe> r = RestApi.getInstance().getAllRecipes();
+			SharedPreferences sharedPreferences = PreferenceManager
+					.getDefaultSharedPreferences(AddRecipe.this);
+			String name = sharedPreferences.getString("username", "ab");
+			if (name.equals("ab"))
+				return false;
+			Recipe my = null;
+			for (Recipe re : r) {
+				if (re.getAutor().equals(name) && re.getName().equals(title)) {
+					my = re;
+				}
+			}
+			if (my != null) {
+				RecipeIngredients rI = new RecipeIngredients();
+				IngredientType iT = null;
+				for (IngredientType i : ingredientsList) {
+					if (i.getName().equals(autoString)) {
+						iT = i;
+					}
+				}
+				if (iT != null) {
+					Log.e("ABCD", "asdijasdioasdasd");
+
+					rI.addIngredient(quantityString, iT);
+				} else {
+					return false;
+				}
+				if (rI != null) {
+					return RestApi.getInstance().addIngredientToRecipe(
+							my.getID(), rI);
+				}
+			} else {
+				return false;
+			}
+
+			return false;
+		}
+
+		protected void onPostExecute(final Boolean success) {
+			mAddIngredient = null;
+			if (success) {
+				Toast.makeText(
+						AddRecipe.this,
+						"You added a Ingredient. You can add now more ingredients",
+						Toast.LENGTH_SHORT).show();
+				quantity.setText(" ");
+				auto.setText(null);
+				ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+						AddRecipe.this, android.R.layout.simple_list_item_1,
+						resIngredients);
+				auto.setAdapter(adapter);
+				View focusView = quantity;
+
+				focusView.requestFocus();
+			} else {
+				Toast.makeText(AddRecipe.this, "Error", Toast.LENGTH_SHORT)
+						.show();
+			}
+		}
+
+		protected void onCancelled() {
+		}
+	}
+
 }

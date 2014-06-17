@@ -40,6 +40,15 @@ public class FavoritesActivity extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_favorites);
 
+		SharedPreferences sharedPreferences = PreferenceManager
+				.getDefaultSharedPreferences(this);
+		String name = sharedPreferences.getString("username", "ab");
+		if(name.equals("ab")){
+			Intent intent = new Intent(FavoritesActivity.this, MainActivity.class);
+			startActivity(intent);
+			finish();
+		}
+
 		findViewById(R.id.home).setOnClickListener(this);
 		findViewById(R.id.searchTab).setOnClickListener(this);
 		findViewById(R.id.favorites).setOnClickListener(this);

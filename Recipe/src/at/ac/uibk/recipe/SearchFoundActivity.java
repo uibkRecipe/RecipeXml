@@ -40,7 +40,6 @@ public class SearchFoundActivity extends FragmentActivity implements
 
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
-			@SuppressWarnings("unchecked")
 			List<Recipe> serializable = ((List<Recipe>) extras
 					.getSerializable("LIST_RECIPE"));
 

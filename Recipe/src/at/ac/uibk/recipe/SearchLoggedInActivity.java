@@ -17,6 +17,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -72,6 +73,16 @@ public class SearchLoggedInActivity extends FragmentActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search_logged_in);
+
+		SharedPreferences sharedPreferences = PreferenceManager
+				.getDefaultSharedPreferences(this);
+		String name = sharedPreferences.getString("username", "ab");
+		if (name.equals("ab")) {
+			Intent intent = new Intent(SearchLoggedInActivity.this,
+					MainActivity.class);
+			startActivity(intent);
+			finish();
+		}
 
 		mUserIngredients = new UserIngredients();
 		mUserIngredients.execute();
@@ -132,7 +143,7 @@ public class SearchLoggedInActivity extends FragmentActivity implements
 		mSearchStatusView = findViewById(R.id.search_status);
 		mSearchStatusMessageView = (TextView) findViewById(R.id.search_status_message);
 
-		findViewById(R.id.search_button).setOnClickListener(
+		findViewById(R.id.searchlogged_button).setOnClickListener(
 				new View.OnClickListener() {
 
 					@Override
@@ -422,7 +433,7 @@ public class SearchLoggedInActivity extends FragmentActivity implements
 
 		protected void onPostExecute(final Boolean success) {
 			mUserRecipesSearch = null;
-
+			Log.e("ABCD", "a asdasda");
 			if (success) {
 				result = new ArrayList<Recipe>();
 
